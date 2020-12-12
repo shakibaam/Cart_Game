@@ -1,10 +1,9 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Scanner;
 
 
-class card {
+  class card {
 
     public char color;
     public int number;
@@ -26,16 +25,16 @@ class card {
 
 class state {
 
-    public ArrayList<ArrayList<card>> GameSpace = new ArrayList<>();
+    public ArrayList<ArrayList<cart>> GameSpace = new ArrayList<>();
     public boolean expand = false;
     public boolean initial = false;
     public String howToGet;
     public ArrayList<String> how = new ArrayList<>();
     int depth;
-    state parent;
+    states parent;
 
 
-    public void setGameSpace(ArrayList<ArrayList<card>> gameSpace) {
+    public void setGameSpace(ArrayList<ArrayList<cart>> gameSpace) {
         GameSpace = gameSpace;
     }
 
@@ -47,7 +46,7 @@ class state {
 
     public ArrayList<Integer> getNumbers(int index) {
 
-        ArrayList<card> temp = GameSpace.get(index);
+        ArrayList<cart> temp = GameSpace.get(index);
         ArrayList<Integer> numbers = new ArrayList<>();
 
         for (int i = 0; i < temp.size(); i++) {
@@ -78,13 +77,13 @@ class state {
 
 public class q1 {
 
-    public ArrayList<state> frontier = new ArrayList<>();
-    public ArrayList<state> explored = new ArrayList<>();
+    public ArrayList<states> frontier = new ArrayList<>();
+    public ArrayList<states> explored = new ArrayList<>();
 
-    state cloning=new state();
+    states cloning=new states();
 
 
-    public void expanding(state state) {
+    public boolean expanding(states state) {
 
 
         ArrayList tempSpace;
@@ -99,7 +98,7 @@ public class q1 {
 //            stateCopy.add((ArrayList<card>) iterator.next().clone());
 //        }
 
-        ArrayList<state> newNodes = new ArrayList();
+        ArrayList<states> newNodes = new ArrayList();
 
 
 
@@ -112,10 +111,10 @@ public class q1 {
             for (int j = 0; j < state.GameSpace.size(); j++) {
 
 
-                ArrayList<ArrayList<card>> stateCopy = new ArrayList<>();
+                ArrayList<ArrayList<cart>> stateCopy = new ArrayList<>();
 
-                for(ArrayList<card> cards : state.GameSpace) {
-                    stateCopy.add((ArrayList<card>) cards.clone());
+                for(ArrayList<cart> cards : state.GameSpace) {
+                    stateCopy.add((ArrayList<cart>) cards.clone());
                 }
                 cloning.setGameSpace(state.GameSpace);
 
@@ -129,15 +128,15 @@ public class q1 {
 
 
                         int x = tempSpace.size() - 1;
-                        card card1 = (card) tempSpace.get(x);
+                        cart card1 = (cart) tempSpace.get(x);
 
 
-                        card card2 = (card) tempSpace1.get(tempSpace1.size() - 1);
+                        cart card2 = (cart) tempSpace1.get(tempSpace1.size() - 1);
 
 
                         if (card1.number < card2.number) {
 
-                            state newSate = new state();
+                            states newSate = new states();
 
                             stateCopy.get(i).remove(card1);
                             stateCopy.get(j).add(card1);
@@ -163,18 +162,41 @@ public class q1 {
                             frontier.add(newSate);
                             newNodes.add(newSate);
 
-                            newSate.printSpace();
+//                            newSate.printSpace();
+
+                            if (goalTest(newSate)){
+
+                                System.out.println("Goal here!!");
+                                System.out.println("Depth of answer: " + newSate.depth);
+                                for (int k = 0; k < newSate.how.size(); k++) {
+
+                                    System.out.println(newSate.how.get(k));
+                                }
+
+                                int produced = frontier.size() + explored.size();
+
+                                System.out.println("produced nodes:" + produced);
+                                System.out.println("Expanded nodes: " + explored.size());
+
+                                return  true;
+                            }
+
+                            else {
+                                System.out.println("Not Goal Yet :(");
+                            }
+
+
 
 
                         }
                     }
 
-                    if (tempSpace1.size() == 0) {
+                    if (tempSpace1.size() == 0 && tempSpace.size()!=0) {
 
-                        card card1 = (card) tempSpace.get(tempSpace.size() - 1);
+                        cart card1 = (cart) tempSpace.get(tempSpace.size() - 1);
 
-                        state newSate = new state();
-//                        stateCopy = state.GameSpace;
+                        states newSate = new states();
+
                         stateCopy.get(i).remove(card1);
                         stateCopy.get(j).add(card1);
 
@@ -183,8 +205,6 @@ public class q1 {
                         newSate.setGameSpace(stateCopy);
 
 
-//                        state.GameSpace.get(j).remove(card1);
-//                        state.GameSpace.get(i).add(card1);
                         String how = card1.number + "" + card1.color + " from " + i + " to " + j;
                         System.out.println("new state reach by: " + how);
                         System.out.println("---------");
@@ -196,7 +216,28 @@ public class q1 {
                         frontier.add(newSate);
                         newNodes.add(newSate);
 
-                        newSate.printSpace();
+//                        newSate.printSpace();
+
+                        if (goalTest(newSate)){
+
+                            System.out.println("Goal here!!");
+                            System.out.println("Depth of answer: " + newSate.depth);
+                            for (int k = 0; k < newSate.how.size(); k++) {
+
+                                System.out.println(newSate.how.get(k));
+                            }
+
+                            int produced = frontier.size() + explored.size();
+
+                            System.out.println("produced nodes:" + produced);
+                            System.out.println("Expanded nodes: " + explored.size());
+
+                            return  true;
+                        }
+
+                        else {
+                            System.out.println("Not Goal Yet :(");
+                        }
 
 
                     }
@@ -218,54 +259,73 @@ public class q1 {
 
         state.expand = true;
 
+        return  false;
+
     }
 
-    public void bfs(int colors, int numbers, state initial) {
+    public void bfs( states initial) {
 
 
         frontier.add(initial);
         boolean goal = false;
+        boolean temp=false;
+
+        for (int i = 0; i <6 ; i++) {
 
 
-        while (!goal) {
+//        while (!goal) {
 
             if (frontier.isEmpty()) {
 
                 System.out.println("No answer...!");
             }
 
-            state toExpand = frontier.get(0);
+            states toExpand = frontier.get(0);
             frontier.remove(0);
             explored.add(toExpand);
-            if (goalTest(toExpand, numbers, colors)) {
+
+
+            temp = expanding(toExpand);
+            System.out.println(frontier.size());
+            if (temp == true) {
+
                 goal = true;
-                System.out.println("Goal!!!");
-                System.out.println("Depth of answer: " + toExpand.depth);
-                for (int i = 0; i < toExpand.how.size(); i++) {
-
-                    System.out.println(toExpand.how.get(i));
-                }
-
-                int produced = frontier.size() + explored.size();
-
-                System.out.println("produced nodes:" + produced);
-                System.out.println("Expanded nodes: " + explored.size());
-
-
-            } else {
-
-                expanding(toExpand);
-
+                System.out.println("algorithm finish...");
             }
+
         }
+//        }
+//            if (goalTest(toExpand)) {
+//                goal = true;
+//                System.out.println("Goal!!!");
+//                System.out.println("Depth of answer: " + toExpand.depth);
+//                for (int i = 0; i < toExpand.how.size(); i++) {
+//
+//                    System.out.println(toExpand.how.get(i));
+//                }
+//
+//                int produced = frontier.size() + explored.size();
+//
+//                System.out.println("produced nodes:" + produced);
+//                System.out.println("Expanded nodes: " + explored.size());
+
+
+//            } else {
+
+
+
+
+
+//            }
+
 
 
     }
 
-    public boolean goalTest(state state, int numbers, int colors) {
+    public boolean goalTest(states state) {
 
         char color;
-//        boolean colSame = true;
+
         boolean sorted = true;
 
 
@@ -277,14 +337,14 @@ public class q1 {
                 for (int j = 1; j < state.GameSpace.get(i).size(); j++) {
 
                     if (state.GameSpace.get(i).get(j).color != color) {
-//                        colSame = false;
+
                         return false;
                     }
 
 
                 }
 
-                sorted = isCollectionSorted(state.GameSpace.get(i));
+                sorted = isCollectionSorted(state.getNumbers(i));
                 if (sorted == false) {
                     return false;
                 }
@@ -358,54 +418,54 @@ public class q1 {
         String card = "";
 
 
-        ArrayList<card> k1 = new ArrayList();
+        ArrayList<cart> k1 = new ArrayList();
         card = "5g";
         int number = Integer.parseInt(String.valueOf(card.charAt(0)));
         char color = card.charAt(1);
-        card g5 = new card(color, number);
+        cart g5 = new cart(color, number);
 
 
         card = "5r";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card r5 = new card(color, number);
+        cart r5 = new cart(color, number);
 
         card = "4y";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card y4 = new card(color, number);
+        cart y4 = new cart(color, number);
 
         k1.add(g5);
         k1.add(r5);
         k1.add(y4);
 
-        ArrayList<card> k2 = new ArrayList();
+        ArrayList<cart> k2 = new ArrayList();
 
         card = "2g";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card g2 = new card(color, number);
+        cart g2 = new cart(color, number);
 
         card = "4r";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card r4 = new card(color, number);
+        cart r4 = new cart(color, number);
 
 
         card = "3y";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card y3 = new card(color, number);
+        cart y3 = new cart(color, number);
 
         card = "3g";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card g3 = new card(color, number);
+        cart g3 = new cart(color, number);
 
         card = "2y";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card y2 = new card(color, number);
+        cart y2 = new cart(color, number);
 
         k2.add(g2);
         k2.add(r4);
@@ -413,58 +473,58 @@ public class q1 {
         k2.add(g3);
         k2.add(y2);
 
-        ArrayList<card> k3 = new ArrayList();
+        ArrayList<cart> k3 = new ArrayList();
 
         card = "1y";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card y1 = new card(color, number);
+        cart y1 = new cart(color, number);
 
         card = "4g";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card g4 = new card(color, number);
+        cart g4 = new cart(color, number);
 
         card = "1r";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card r1 = new card(color, number);
+        cart r1 = new cart(color, number);
 
         k3.add(y1);
         k3.add(g4);
         k3.add(r1);
 
-        ArrayList<card> k4 = new ArrayList();
+        ArrayList<cart> k4 = new ArrayList();
 
 
         card = "1g";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card g1 = new card(color, number);
+        cart g1 = new cart(color, number);
 
         card = "2r";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card r2 = new card(color, number);
+        cart r2 = new cart(color, number);
 
         card = "5y";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card y5 = new card(color, number);
+        cart y5 = new cart(color, number);
 
         card = "3r";
         number = Integer.parseInt(String.valueOf(card.charAt(0)));
         color = card.charAt(1);
-        card r3 = new card(color, number);
+        cart r3 = new cart(color, number);
 
         k4.add(g1);
         k4.add(r2);
         k4.add(y5);
         k4.add(r3);
 
-        ArrayList<card> k5 = new ArrayList();
+        ArrayList<cart> k5 = new ArrayList();
 
-        state initialState = new state();
+        states initialState = new states();
         initialState.GameSpace.add(k1);
         initialState.GameSpace.add(k2);
         initialState.GameSpace.add(k3);
@@ -473,8 +533,8 @@ public class q1 {
         initialState.initial = true;
         initialState.depth = 0;
         q1 q1 = new q1();
-        q1.expanding(initialState);
-//        q1.bfs(3, 5, initialState);
+//        q1.expanding(initialState);
+        q1.bfs( initialState);
 
 
     }
