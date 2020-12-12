@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Scanner;
 
 
@@ -57,6 +58,21 @@ class state {
         return numbers;
     }
 
+    public  void printSpace(){
+
+        for (int i = 0; i <GameSpace.size() ; i++) {
+
+            for (int j = 0; j <GameSpace.get(i).size() ; j++) {
+
+                System.out.print(GameSpace.get(i).get(j));
+            }
+            System.out.println();
+
+        }
+
+        System.out.println("------------");
+    }
+
 
 }
 
@@ -65,24 +81,44 @@ public class q1 {
     public ArrayList<state> frontier = new ArrayList<>();
     public ArrayList<state> explored = new ArrayList<>();
 
+    state cloning=new state();
+
 
     public void expanding(state state) {
 
-        ArrayList<ArrayList<card>> stateCopy = new ArrayList<>();
+
         ArrayList tempSpace;
         ArrayList tempSpace1;
 
-        for (int i = 0; i < state.GameSpace.size(); i++) {
-            stateCopy.add(state.GameSpace.get(i));
-        }
 
+//        Iterator<ArrayList<card>> iterator = state.GameSpace.iterator();
+//
+//        while(iterator.hasNext())
+//        {
+//            //Add the object clones
+//            stateCopy.add((ArrayList<card>) iterator.next().clone());
+//        }
 
         ArrayList<state> newNodes = new ArrayList();
 
+
+
+
         for (int i = 0; i < state.GameSpace.size(); i++) {
 
 
+
+
             for (int j = 0; j < state.GameSpace.size(); j++) {
+
+
+                ArrayList<ArrayList<card>> stateCopy = new ArrayList<>();
+
+                for(ArrayList<card> cards : state.GameSpace) {
+                    stateCopy.add((ArrayList<card>) cards.clone());
+                }
+                cloning.setGameSpace(state.GameSpace);
+
 
 
                 if (j != i) {
@@ -107,8 +143,14 @@ public class q1 {
                             stateCopy.get(j).add(card1);
                             newSate.setGameSpace(stateCopy);
 
-                            state.GameSpace.get(i).add(card1);
-                            state.GameSpace.get(j).remove(card1);
+//                            cloning.GameSpace.get(i).remove(card1);
+//                            cloning.GameSpace.get(j).add(card1);
+//                            newSate.setGameSpace(cloning.GameSpace);
+
+
+//                            state.GameSpace.get(i).add(card1);
+//                            state.GameSpace.get(j).remove(card1);
+
 
                             String how = card1.number + "" + card1.color + " from " + i + " to " + j;
                             System.out.println("new state reach by: " + how);
@@ -121,6 +163,9 @@ public class q1 {
                             frontier.add(newSate);
                             newNodes.add(newSate);
 
+                            newSate.printSpace();
+
+
                         }
                     }
 
@@ -129,10 +174,17 @@ public class q1 {
                         card card1 = (card) tempSpace.get(tempSpace.size() - 1);
 
                         state newSate = new state();
-                        stateCopy = state.GameSpace;
+//                        stateCopy = state.GameSpace;
+                        stateCopy.get(i).remove(card1);
                         stateCopy.get(j).add(card1);
+
+
+
                         newSate.setGameSpace(stateCopy);
-                        state.GameSpace.get(j).remove(card1);
+
+
+//                        state.GameSpace.get(j).remove(card1);
+//                        state.GameSpace.get(i).add(card1);
                         String how = card1.number + "" + card1.color + " from " + i + " to " + j;
                         System.out.println("new state reach by: " + how);
                         System.out.println("---------");
@@ -144,9 +196,15 @@ public class q1 {
                         frontier.add(newSate);
                         newNodes.add(newSate);
 
+                        newSate.printSpace();
+
+
                     }
 
+
+
                 }
+
 
 
             }
@@ -415,8 +473,8 @@ public class q1 {
         initialState.initial = true;
         initialState.depth = 0;
         q1 q1 = new q1();
-//        q1.expanding(initialState);
-        q1.bfs(3, 5, initialState);
+        q1.expanding(initialState);
+//        q1.bfs(3, 5, initialState);
 
 
     }
