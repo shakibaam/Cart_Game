@@ -57,11 +57,11 @@ class states {
         return numbers;
     }
 
-    public  void printSpace(){
+    public void printSpace() {
 
-        for (int i = 0; i <GameSpace.size() ; i++) {
+        for (int i = 0; i < GameSpace.size(); i++) {
 
-            for (int j = 0; j <GameSpace.get(i).size() ; j++) {
+            for (int j = 0; j < GameSpace.get(i).size(); j++) {
 
                 System.out.print(GameSpace.get(i).get(j));
             }
@@ -80,8 +80,8 @@ public class q2 {
     public ArrayList<states> frontier = new ArrayList<>();
     public ArrayList<states> explored = new ArrayList<>();
 
-    states cloning=new states();
-    int counter=0;
+    states cloning = new states();
+    int counter = 0;
 
 
     public void expanding(states state) {
@@ -91,22 +91,10 @@ public class q2 {
         ArrayList tempSpace1;
 
 
-//        Iterator<ArrayList<card>> iterator = state.GameSpace.iterator();
-//
-//        while(iterator.hasNext())
-//        {
-//            //Add the object clones
-//            stateCopy.add((ArrayList<card>) iterator.next().clone());
-//        }
-
         ArrayList<states> newNodes = new ArrayList();
 
 
-
-
         for (int i = 0; i < state.GameSpace.size(); i++) {
-
-
 
 
             for (int j = 0; j < state.GameSpace.size(); j++) {
@@ -114,11 +102,10 @@ public class q2 {
 
                 ArrayList<ArrayList<cart>> stateCopy = new ArrayList<>();
 
-                for(ArrayList<cart> cards : state.GameSpace) {
+                for (ArrayList<cart> cards : state.GameSpace) {
                     stateCopy.add((ArrayList<cart>) cards.clone());
                 }
                 cloning.setGameSpace(state.GameSpace);
-
 
 
                 if (j != i) {
@@ -143,25 +130,18 @@ public class q2 {
                             stateCopy.get(j).add(card1);
                             newSate.setGameSpace(stateCopy);
 
-//                            cloning.GameSpace.get(i).remove(card1);
-//                            cloning.GameSpace.get(j).add(card1);
-//                            newSate.setGameSpace(cloning.GameSpace);
-
-
-//                            state.GameSpace.get(i).add(card1);
-//                            state.GameSpace.get(j).remove(card1);
-
 
                             String how = card1.number + "" + card1.color + " from " + i + " to " + j;
-//                            System.out.println("new state reach by: " + how);
-//                            System.out.println("---------");
+                            System.out.println("new state reach by: " + how);
+                            System.out.println("---------");
 
                             newSate.howToGet = how;
                             newSate.depth = state.depth + 1;
                             newSate.how = state.how;
                             newSate.how.add(how);
                             newSate.parent = state;
-                            frontier.add( counter,newSate);
+                            frontier.add(counter, newSate);
+
 
                             newNodes.add(newSate);
 
@@ -172,7 +152,7 @@ public class q2 {
                         }
                     }
 
-                    if (tempSpace1.size() == 0 && tempSpace.size()!=0) {
+                    if (tempSpace1.size() == 0 && tempSpace.size() != 0) {
 
                         cart card1 = (cart) tempSpace.get(tempSpace.size() - 1);
 
@@ -182,20 +162,20 @@ public class q2 {
                         stateCopy.get(j).add(card1);
 
 
-
                         newSate.setGameSpace(stateCopy);
 
 
                         String how = card1.number + "" + card1.color + " from " + i + " to " + j;
-//                        System.out.println("new state reach by: " + how);
-//                        System.out.println("---------");
-//                        System.out.println("helllooooo");
+                        System.out.println("new state reach by: " + how);
+                        System.out.println("---------");
+
                         newSate.howToGet = how;
                         newSate.depth = state.depth + 1;
                         newSate.parent = state;
                         newSate.how = state.how;
                         newSate.how.add(how);
-                        frontier.add( counter,newSate);
+                        frontier.add(counter, newSate);
+
 
                         newNodes.add(newSate);
 
@@ -206,11 +186,7 @@ public class q2 {
                     }
 
 
-
                 }
-
-
-
 
 
             }
@@ -226,49 +202,126 @@ public class q2 {
 
     }
 
-    public void bfs(int colors, int numbers, states initial) {
+    public boolean dfs(int colors, int numbers, states initial) {
 
 
         frontier.add(initial);
         boolean goal = false;
 
 
-        while (!goal) {
+        if (frontier.isEmpty()) {
 
-            if (frontier.isEmpty()) {
+            System.out.println("No answer...!");
+        }
 
-                System.out.println("No answer...!");
-            }
+        states toExpand = frontier.get(0);
+        frontier.remove(0);
+        explored.add(toExpand);
+        if (goalTest(toExpand)) {
 
-            states toExpand = frontier.get(0);
-            frontier.remove(0);
-            explored.add(toExpand);
-            if (goalTest(toExpand, numbers, colors)) {
-                goal = true;
-                System.out.println("Goal!!!");
-                System.out.println("Depth of answer: " + toExpand.depth);
-                for (int i = 0; i < toExpand.how.size(); i++) {
-
-                    System.out.println(toExpand.how.get(i));
-                }
-
-                int produced = frontier.size() + explored.size();
-
-                System.out.println("produced nodes:" + produced);
-                System.out.println("Expanded nodes: " + explored.size());
+            return true;
+        } else {
+            expanding(toExpand);
+            return false;
 
 
-            } else {
-
-                expanding(toExpand);
-
-            }
         }
 
 
     }
 
-    public boolean goalTest(states state, int numbers, int colors) {
+
+    public void IDS() {
+
+
+        int limit = 0;
+
+    }
+
+
+    public boolean DLS(int limit) {
+
+        boolean goal = false;
+
+
+        if (limit == 0) {
+
+            if (goalTest(frontier.get(0))) {
+
+                goal = true;
+                return true;
+            } else return false;
+        }
+
+        else {
+
+            boolean superFlag = true;
+            while (superFlag) {
+
+                if (frontier.isEmpty()){
+                    if (explored.isEmpty()){
+                        superFlag=false;
+
+                    }
+                    else {
+
+                        for (int i = 0; i < explored.size(); i++) {
+                            if (goalTest(explored.get(i))) {
+                                return true;
+                            }
+
+
+                        }
+                        superFlag=false;
+                    }
+                }
+
+                states toexpand = frontier.get(0);
+                if (toexpand.depth == limit) {
+
+
+                    boolean stillCutOff = true;
+                    while (stillCutOff) {
+
+                        states temp = frontier.get(0);
+                        if (temp.depth == limit) {
+
+                            if (goalTest(temp)) {
+                                System.out.println("Goal");
+                                return true;
+                            } else {
+
+                                frontier.remove(0);
+                            }
+                        } else {
+
+                            states temp1 = explored.get(explored.size() - 1);
+                            if (goalTest(temp1)) {
+
+                                System.out.println("Goal");
+                                return true;
+                            } else {
+                                explored.remove(explored.size() - 1);
+                            }
+
+                            stillCutOff = false;
+
+                        }
+                    }
+
+
+                } else {
+
+                    expanding(toexpand);
+                }
+
+            }
+        }
+
+        return  false;
+    }
+
+    public boolean goalTest(states state) {
 
         char color;
 //        boolean colSame = true;
@@ -478,8 +531,8 @@ public class q2 {
         initialState.GameSpace.add(k5);
         initialState.initial = true;
         initialState.depth = 0;
-        q1 q1 = new q1();
-        q1.expanding(initialState);
+        q2 q2 = new q2();
+        q2.expanding(initialState);
 //        q1.bfs(3, 5, initialState);
 
 

@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.Scanner;
 
 
-  class card {
+class card {
 
     public char color;
     public int number;
@@ -57,11 +57,11 @@ class state {
         return numbers;
     }
 
-    public  void printSpace(){
+    public void printSpace() {
 
-        for (int i = 0; i <GameSpace.size() ; i++) {
+        for (int i = 0; i < GameSpace.size(); i++) {
 
-            for (int j = 0; j <GameSpace.get(i).size() ; j++) {
+            for (int j = 0; j < GameSpace.get(i).size(); j++) {
 
                 System.out.print(GameSpace.get(i).get(j));
             }
@@ -80,7 +80,7 @@ public class q1 {
     public ArrayList<states> frontier = new ArrayList<>();
     public ArrayList<states> explored = new ArrayList<>();
 
-    states cloning=new states();
+    states cloning = new states();
 
 
     public boolean expanding(states state) {
@@ -90,22 +90,10 @@ public class q1 {
         ArrayList tempSpace1;
 
 
-//        Iterator<ArrayList<card>> iterator = state.GameSpace.iterator();
-//
-//        while(iterator.hasNext())
-//        {
-//            //Add the object clones
-//            stateCopy.add((ArrayList<card>) iterator.next().clone());
-//        }
-
         ArrayList<states> newNodes = new ArrayList();
 
 
-
-
         for (int i = 0; i < state.GameSpace.size(); i++) {
-
-
 
 
             for (int j = 0; j < state.GameSpace.size(); j++) {
@@ -113,11 +101,10 @@ public class q1 {
 
                 ArrayList<ArrayList<cart>> stateCopy = new ArrayList<>();
 
-                for(ArrayList<cart> cards : state.GameSpace) {
+                for (ArrayList<cart> cards : state.GameSpace) {
                     stateCopy.add((ArrayList<cart>) cards.clone());
                 }
                 cloning.setGameSpace(state.GameSpace);
-
 
 
                 if (j != i) {
@@ -142,14 +129,6 @@ public class q1 {
                             stateCopy.get(j).add(card1);
                             newSate.setGameSpace(stateCopy);
 
-//                            cloning.GameSpace.get(i).remove(card1);
-//                            cloning.GameSpace.get(j).add(card1);
-//                            newSate.setGameSpace(cloning.GameSpace);
-
-
-//                            state.GameSpace.get(i).add(card1);
-//                            state.GameSpace.get(j).remove(card1);
-
 
                             String how = card1.number + "" + card1.color + " from " + i + " to " + j;
                             System.out.println("new state reach by: " + how);
@@ -164,7 +143,7 @@ public class q1 {
 
 //                            newSate.printSpace();
 
-                            if (goalTest(newSate)){
+                            if (goalTest(newSate)) {
 
                                 System.out.println("Goal here!!");
                                 System.out.println("Depth of answer: " + newSate.depth);
@@ -178,20 +157,16 @@ public class q1 {
                                 System.out.println("produced nodes:" + produced);
                                 System.out.println("Expanded nodes: " + explored.size());
 
-                                return  true;
-                            }
-
-                            else {
+                                return true;
+                            } else {
                                 System.out.println("Not Goal Yet :(");
                             }
-
-
 
 
                         }
                     }
 
-                    if (tempSpace1.size() == 0 && tempSpace.size()!=0) {
+                    if (tempSpace1.size() == 0 && tempSpace.size() != 0) {
 
                         cart card1 = (cart) tempSpace.get(tempSpace.size() - 1);
 
@@ -199,7 +174,6 @@ public class q1 {
 
                         stateCopy.get(i).remove(card1);
                         stateCopy.get(j).add(card1);
-
 
 
                         newSate.setGameSpace(stateCopy);
@@ -218,7 +192,7 @@ public class q1 {
 
 //                        newSate.printSpace();
 
-                        if (goalTest(newSate)){
+                        if (goalTest(newSate)) {
 
                             System.out.println("Goal here!!");
                             System.out.println("Depth of answer: " + newSate.depth);
@@ -232,10 +206,8 @@ public class q1 {
                             System.out.println("produced nodes:" + produced);
                             System.out.println("Expanded nodes: " + explored.size());
 
-                            return  true;
-                        }
-
-                        else {
+                            return true;
+                        } else {
                             System.out.println("Not Goal Yet :(");
                         }
 
@@ -243,9 +215,7 @@ public class q1 {
                     }
 
 
-
                 }
-
 
 
             }
@@ -259,18 +229,18 @@ public class q1 {
 
         state.expand = true;
 
-        return  false;
+        return false;
 
     }
 
-    public void bfs( states initial) {
+    public void bfs(states initial) {
 
 
         frontier.add(initial);
         boolean goal = false;
-        boolean temp=false;
+        boolean temp = false;
 
-        for (int i = 0; i <6 ; i++) {
+        for (int i = 0; i < 100; i++) {
 
 
 //        while (!goal) {
@@ -313,11 +283,7 @@ public class q1 {
 //            } else {
 
 
-
-
-
 //            }
-
 
 
     }
@@ -534,7 +500,7 @@ public class q1 {
         initialState.depth = 0;
         q1 q1 = new q1();
 //        q1.expanding(initialState);
-        q1.bfs( initialState);
+        q1.bfs(initialState);
 
 
     }
