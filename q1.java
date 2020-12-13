@@ -31,7 +31,7 @@ class state {
     public String howToGet;
     public ArrayList<String> how = new ArrayList<>();
     int depth;
-    states parent;
+    state parent;
 
 
     public void setGameSpace(ArrayList<ArrayList<cart>> gameSpace) {
@@ -77,20 +77,20 @@ class state {
 
 public class q1 {
 
-    public ArrayList<states> frontier = new ArrayList<>();
-    public ArrayList<states> explored = new ArrayList<>();
-
-    states cloning = new states();
+    public ArrayList<state> frontier = new ArrayList<>();
+    public ArrayList<state> explored = new ArrayList<>();
 
 
-    public boolean expanding(states state) {
+
+
+    public boolean expanding(state state) {
 
 
         ArrayList tempSpace;
         ArrayList tempSpace1;
 
 
-        ArrayList<states> newNodes = new ArrayList();
+        ArrayList<state> newNodes = new ArrayList();
 
 
         for (int i = 0; i < state.GameSpace.size(); i++) {
@@ -104,7 +104,7 @@ public class q1 {
                 for (ArrayList<cart> cards : state.GameSpace) {
                     stateCopy.add((ArrayList<cart>) cards.clone());
                 }
-                cloning.setGameSpace(state.GameSpace);
+
 
 
                 if (j != i) {
@@ -123,7 +123,7 @@ public class q1 {
 
                         if (card1.number < card2.number) {
 
-                            states newSate = new states();
+                            state newSate = new state();
 
                             stateCopy.get(i).remove(card1);
                             stateCopy.get(j).add(card1);
@@ -170,7 +170,7 @@ public class q1 {
 
                         cart card1 = (cart) tempSpace.get(tempSpace.size() - 1);
 
-                        states newSate = new states();
+                        state newSate = new state();
 
                         stateCopy.get(i).remove(card1);
                         stateCopy.get(j).add(card1);
@@ -233,7 +233,7 @@ public class q1 {
 
     }
 
-    public void bfs(states initial) {
+    public void bfs(state initial) {
 
 
         frontier.add(initial);
@@ -250,7 +250,7 @@ public class q1 {
                 System.out.println("No answer...!");
             }
 
-            states toExpand = frontier.get(0);
+            state toExpand = frontier.get(0);
             System.out.println("to Expand:");
 
             frontier.remove(0);
@@ -278,7 +278,7 @@ public class q1 {
 
     }
 
-    public boolean goalTest(states state) {
+    public boolean goalTest(state state) {
 
         char color;
 
@@ -439,7 +439,7 @@ public class q1 {
 
         ArrayList<cart> k5 = new ArrayList();
 
-        states initialState = new states();
+        state initialState = new state();
         initialState.GameSpace.add(k1);
         initialState.GameSpace.add(k2);
         initialState.GameSpace.add(k3);
