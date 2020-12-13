@@ -3,12 +3,12 @@ import java.util.Collections;
 import java.util.Scanner;
 
 
-class card {
+class cart {
 
     public char color;
     public int number;
 
-    public card(char color, int number) {
+    public cart(char color, int number) {
         this.color = color;
         this.number = number;
     }
@@ -81,8 +81,6 @@ public class q1 {
     public ArrayList<state> explored = new ArrayList<>();
 
 
-
-
     public boolean expanding(state state) {
 
 
@@ -104,7 +102,6 @@ public class q1 {
                 for (ArrayList<cart> cards : state.GameSpace) {
                     stateCopy.add((ArrayList<cart>) cards.clone());
                 }
-
 
 
                 if (j != i) {
@@ -241,29 +238,41 @@ public class q1 {
         boolean temp = false;
 
 
+//        while (!goal) {
 
+        for (int i = 0; i < 5; i++) {
 
-        while (!goal) {
 
             if (frontier.isEmpty()) {
 
                 System.out.println("No answer...!");
+
             }
 
             state toExpand = frontier.get(0);
-            System.out.println("to Expand:");
+
 
             frontier.remove(0);
+            boolean redundant = false;
 
-            if (explored.contains(toExpand)){
-                continue;
+            for (int j = 0; j < frontier.size(); j++) {
+
+
+                if (statesEqual(frontier.get(j), toExpand)) {
+
+                    redundant = true;
+                }
+
             }
-            else {
+            if (redundant) {
+                System.out.println("redundant!!");
+                continue;
+            } else {
                 explored.add(toExpand);
 
 
                 temp = expanding(toExpand);
-                System.out.println(frontier.size());
+
                 if (temp == true) {
 
                     goal = true;
@@ -271,11 +280,27 @@ public class q1 {
                 }
             }
 
+            System.out.println(frontier.size());
+
 
         }
 
 
+    }
 
+
+    public boolean statesEqual(state state1, state state2) {
+
+        for (int i = 0; i < state1.GameSpace.size(); i++) {
+
+
+            if (!state1.getNumbers(i).equals(state2.getNumbers(i))) {
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
     public boolean goalTest(state state) {
@@ -312,10 +337,7 @@ public class q1 {
         return true;
 
 
-
-
     }
-
 
 
     public boolean isCollectionSorted(ArrayList list) {
@@ -450,8 +472,17 @@ public class q1 {
         q1 q1 = new q1();
 //        q1.expanding(initialState);
 
-        q1.bfs(initialState);
+        state test=new state();
 
+        test.GameSpace.add(k1);
+        test.GameSpace.add(k2);
+        test.GameSpace.add(k3);
+        test.GameSpace.add(k4);
+        test.GameSpace.add(k5);
+
+
+
+        q1.bfs(initialState);
 
 
     }
