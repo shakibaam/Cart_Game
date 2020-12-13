@@ -238,9 +238,9 @@ public class q1 {
         boolean temp = false;
 
 
-//        while (!goal) {
+        while (!goal) {
 
-        for (int i = 0; i < 5; i++) {
+//        for (int i = 0; i <10; i++) {
 
 
             if (frontier.isEmpty()) {
@@ -264,10 +264,25 @@ public class q1 {
                 }
 
             }
+
+            for (int j = 0; j <explored.size() ; j++) {
+
+                if (statesEqual(explored.get(j), toExpand)) {
+
+                    redundant = true;
+                }
+
+            }
+
             if (redundant) {
                 System.out.println("redundant!!");
                 continue;
-            } else {
+            }
+
+
+
+
+            else {
                 explored.add(toExpand);
 
 
@@ -472,13 +487,13 @@ public class q1 {
         q1 q1 = new q1();
 //        q1.expanding(initialState);
 
-        state test=new state();
-
-        test.GameSpace.add(k1);
-        test.GameSpace.add(k2);
-        test.GameSpace.add(k3);
-        test.GameSpace.add(k4);
-        test.GameSpace.add(k5);
+//        state test=new state();
+//
+//        test.GameSpace.add(k1);
+//        test.GameSpace.add(k2);
+//        test.GameSpace.add(k3);
+//        test.GameSpace.add(k4);
+//        test.GameSpace.add(k5);
 
 
 
