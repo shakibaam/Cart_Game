@@ -240,10 +240,10 @@ public class q1 {
         boolean goal = false;
         boolean temp = false;
 
-        for (int i = 0; i < 100; i++) {
 
 
-//        while (!goal) {
+
+        while (!goal) {
 
             if (frontier.isEmpty()) {
 
@@ -251,39 +251,29 @@ public class q1 {
             }
 
             states toExpand = frontier.get(0);
+            System.out.println("to Expand:");
+
             frontier.remove(0);
-            explored.add(toExpand);
+
+            if (explored.contains(toExpand)){
+                continue;
+            }
+            else {
+                explored.add(toExpand);
 
 
-            temp = expanding(toExpand);
-            System.out.println(frontier.size());
-            if (temp == true) {
+                temp = expanding(toExpand);
+                System.out.println(frontier.size());
+                if (temp == true) {
 
-                goal = true;
-                System.out.println("algorithm finish...");
+                    goal = true;
+                    System.out.println("algorithm finish...");
+                }
             }
 
+
         }
-//        }
-//            if (goalTest(toExpand)) {
-//                goal = true;
-//                System.out.println("Goal!!!");
-//                System.out.println("Depth of answer: " + toExpand.depth);
-//                for (int i = 0; i < toExpand.how.size(); i++) {
-//
-//                    System.out.println(toExpand.how.get(i));
-//                }
-//
-//                int produced = frontier.size() + explored.size();
-//
-//                System.out.println("produced nodes:" + produced);
-//                System.out.println("Expanded nodes: " + explored.size());
 
-
-//            } else {
-
-
-//            }
 
 
     }
@@ -321,51 +311,12 @@ public class q1 {
 
         return true;
 
-//        int i = 0;
-//        int counter = 0;
-//
-//        for (int k = 0; k < state.GameSpace.size(); k++) {
-//
-//            ArrayList<card> temp = state.GameSpace.get(k);
-//            if (isSorted(temp)) {
-//
-//                counter++;
-//
-//                if (counter == numbers) {
-//
-//                    return true;
-//                }
-//            }
-//
-//
-//        }
-//
-//        return false;
+
 
 
     }
 
-//    boolean isSorted(ArrayList<card> array) {
-//        for (int i = 0; i < array.size() - 1; i++) {
-//            if ((array.get(i).number < array.get(i + 1).number)) {
-//
-//
-//                return false;
-//
-//            }
-//
-//
-//            if (array.get(i).color != array.get(i + 1).color) {
-//
-//                return false;
-//            }
-//
-//
-//        }
-//
-//
-//        return true;
-//    }
+
 
     public boolean isCollectionSorted(ArrayList list) {
         ArrayList copy = new ArrayList(list);
@@ -378,9 +329,7 @@ public class q1 {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-//        int k=scanner.nextInt();
-//        int colors=scanner.nextInt();
-//        int numbers=scanner.nextInt();
+
         String card = "";
 
 
@@ -500,7 +449,9 @@ public class q1 {
         initialState.depth = 0;
         q1 q1 = new q1();
 //        q1.expanding(initialState);
+
         q1.bfs(initialState);
+
 
 
     }
