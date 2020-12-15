@@ -1,3 +1,6 @@
+package question2;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -140,12 +143,15 @@ public class q2 {
                             newSate.how = state.how;
                             newSate.how.add(how);
                             newSate.parent = state;
+
+                            System.out.println("counter: "+ counter);
+
                             frontier.add(counter, newSate);
 
 
                             newNodes.add(newSate);
 
-                            newSate.printSpace();
+//                            newSate.printSpace();
                             counter++;
 
 
@@ -174,12 +180,13 @@ public class q2 {
                         newSate.parent = state;
                         newSate.how = state.how;
                         newSate.how.add(how);
+                        System.out.println("counter: "+ counter);
                         frontier.add(counter, newSate);
 
 
                         newNodes.add(newSate);
 
-                        newSate.printSpace();
+//                        newSate.printSpace();
                         counter++;
 
 
@@ -196,45 +203,58 @@ public class q2 {
 
         System.out.println("Expanding this node finish...");
         System.out.println("******");
+        counter=0;
+        explored.add(state);
 
 
         state.expand = true;
 
     }
 
-    public boolean dfs(int colors, int numbers, states initial) {
+//    public boolean dfs(int colors, int numbers, states initial) {
+//
+//
+//        frontier.add(initial);
+//        boolean goal = false;
+//
+//
+//        if (frontier.isEmpty()) {
+//
+//            System.out.println("No answer...!");
+//        }
+//
+//        states toExpand = frontier.get(0);
+//        frontier.remove(0);
+//        explored.add(toExpand);
+//        if (goalTest(toExpand)) {
+//
+//            return true;
+//        } else {
+//            expanding(toExpand);
+//            return false;
+//
+//
+//        }
+//
+//
+//    }
 
 
-        frontier.add(initial);
-        boolean goal = false;
+    public boolean IDS(int limit) {
 
+        for (int i = 0; i <=limit ; i++) {
 
-        if (frontier.isEmpty()) {
+            System.out.println("DLS: "+ i);
 
-            System.out.println("No answer...!");
+            if (DLS(i)){
+
+                System.out.println("Yaaay!!");
+                return  true;
+            }
+
         }
 
-        states toExpand = frontier.get(0);
-        frontier.remove(0);
-        explored.add(toExpand);
-        if (goalTest(toExpand)) {
-
-            return true;
-        } else {
-            expanding(toExpand);
-            return false;
-
-
-        }
-
-
-    }
-
-
-    public void IDS() {
-
-
-        int limit = 0;
+        return false;
 
     }
 
@@ -257,23 +277,24 @@ public class q2 {
 
             boolean superFlag = true;
             while (superFlag) {
+                System.out.println(frontier.size());
 
                 if (frontier.isEmpty()){
-                    if (explored.isEmpty()){
-                        superFlag=false;
 
-                    }
-                    else {
 
                         for (int i = 0; i < explored.size(); i++) {
                             if (goalTest(explored.get(i))) {
                                 return true;
+                            } else {
+
+                                explored.remove(i);
                             }
-
-
                         }
-                        superFlag=false;
-                    }
+                    superFlag=false;
+                    System.out.println("No GOAL Found :(");
+                        return  false;
+
+
                 }
 
                 states toexpand = frontier.get(0);
@@ -283,15 +304,31 @@ public class q2 {
                     boolean stillCutOff = true;
                     while (stillCutOff) {
 
-                        states temp = frontier.get(0);
+
+                            states temp = frontier.get(0);
                         if (temp.depth == limit) {
 
                             if (goalTest(temp)) {
-                                System.out.println("Goal");
+                                System.out.println("Goal!!");
                                 return true;
                             } else {
 
                                 frontier.remove(0);
+                                if (frontier.size()==0){
+
+                                    states temp1 = explored.get(explored.size() - 1);
+                                    if (goalTest(temp1)) {
+
+                                        System.out.println("Goal");
+                                        return true;
+                                    } else {
+                                        explored.remove(explored.size() - 1);
+                                    }
+
+
+                                    stillCutOff = false;
+
+                                }
                             }
                         } else {
 
@@ -304,19 +341,25 @@ public class q2 {
                                 explored.remove(explored.size() - 1);
                             }
 
+
                             stillCutOff = false;
 
                         }
                     }
 
 
+
                 } else {
 
+                    frontier.remove(0);
+                    toexpand.printSpace();
                     expanding(toexpand);
                 }
 
             }
         }
+
+        System.out.println("No GOAL Found :(");
 
         return  false;
     }
@@ -354,51 +397,12 @@ public class q2 {
 
         return true;
 
-//        int i = 0;
-//        int counter = 0;
-//
-//        for (int k = 0; k < state.GameSpace.size(); k++) {
-//
-//            ArrayList<card> temp = state.GameSpace.get(k);
-//            if (isSorted(temp)) {
-//
-//                counter++;
-//
-//                if (counter == numbers) {
-//
-//                    return true;
-//                }
-//            }
-//
-//
-//        }
-//
-//        return false;
+
 
 
     }
 
-//    boolean isSorted(ArrayList<card> array) {
-//        for (int i = 0; i < array.size() - 1; i++) {
-//            if ((array.get(i).number < array.get(i + 1).number)) {
-//
-//
-//                return false;
-//
-//            }
-//
-//
-//            if (array.get(i).color != array.get(i + 1).color) {
-//
-//                return false;
-//            }
-//
-//
-//        }
-//
-//
-//        return true;
-//    }
+
 
     public boolean isCollectionSorted(ArrayList list) {
         ArrayList copy = new ArrayList(list);
@@ -532,8 +536,10 @@ public class q2 {
         initialState.initial = true;
         initialState.depth = 0;
         q2 q2 = new q2();
-        q2.expanding(initialState);
-//        q1.bfs(3, 5, initialState);
+        q2.frontier.add(initialState);
+
+       q2.IDS(400);
+
 
 
     }
