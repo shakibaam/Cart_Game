@@ -1,3 +1,5 @@
+
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -365,139 +367,61 @@ public class q1 {
 
     public static void main(String[] args) {
 
+
+
+
         Scanner scanner = new Scanner(System.in);
+        int k = scanner.nextInt();
+        int colors = scanner.nextInt();
+        int numbers = scanner.nextInt();
+        ArrayList input = new ArrayList();
+        ArrayList<ArrayList<cart>> space = new ArrayList<>();
 
-        String card = "";
-
-
-        ArrayList<cart> k1 = new ArrayList();
-        card = "5g";
-        int number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        char color = card.charAt(1);
-        cart g5 = new cart(color, number);
+        for (int i = 0; i <= k; i++) {
 
 
-        card = "5r";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart r5 = new cart(color, number);
+            String str = scanner.nextLine();
+            input.add(str);
 
-        card = "4y";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart y4 = new cart(color, number);
-
-        k1.add(g5);
-        k1.add(r5);
-        k1.add(y4);
-
-        ArrayList<cart> k2 = new ArrayList();
-
-        card = "2g";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart g2 = new cart(color, number);
-
-        card = "4r";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart r4 = new cart(color, number);
+        }
+        input.remove(0);
 
 
-        card = "3y";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart y3 = new cart(color, number);
+        for (int i = 0; i < k; i++) {
 
-        card = "3g";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart g3 = new cart(color, number);
+            String temp = (String) input.get(i);
+            System.out.println(temp);
+            ArrayList<cart> spacei = new ArrayList();
 
-        card = "2y";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart y2 = new cart(color, number);
+            String[] splited = temp.split("\\s+");
 
-        k2.add(g2);
-        k2.add(r4);
-        k2.add(y3);
-        k2.add(g3);
-        k2.add(y2);
+            for (int j = 0; j < splited.length; j++) {
 
-        ArrayList<cart> k3 = new ArrayList();
-
-        card = "1y";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart y1 = new cart(color, number);
-
-        card = "4g";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart g4 = new cart(color, number);
-
-        card = "1r";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart r1 = new cart(color, number);
-
-        k3.add(y1);
-        k3.add(g4);
-        k3.add(r1);
-
-        ArrayList<cart> k4 = new ArrayList();
+                String card = splited[j];
+                if (!card.equals("#")) {
+                    int number = Integer.parseInt(String.valueOf(card.charAt(0)));
+                    char color = card.charAt(1);
+                    cart cart = new cart(color, number);
+                    spacei.add(cart);
+                }
 
 
-        card = "1g";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart g1 = new cart(color, number);
+            }
+            space.add(spacei);
 
-        card = "2r";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart r2 = new cart(color, number);
+        }
 
-        card = "5y";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart y5 = new cart(color, number);
 
-        card = "3r";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart r3 = new cart(color, number);
-
-        k4.add(g1);
-        k4.add(r2);
-        k4.add(y5);
-        k4.add(r3);
-
-        ArrayList<cart> k5 = new ArrayList();
 
         state initialState = new state();
-        initialState.GameSpace.add(k1);
-        initialState.GameSpace.add(k2);
-        initialState.GameSpace.add(k3);
-        initialState.GameSpace.add(k4);
-        initialState.GameSpace.add(k5);
+        initialState.GameSpace=space;
+
         initialState.initial = true;
         initialState.depth = 0;
         q1 q1 = new q1();
-//        q1.expanding(initialState);
+        q1.frontier.add(initialState);
+        q1.expanding(initialState);
 
-//        state test=new state();
-//
-//        test.GameSpace.add(k1);
-//        test.GameSpace.add(k2);
-//        test.GameSpace.add(k3);
-//        test.GameSpace.add(k4);
-//        test.GameSpace.add(k5);
-
-
-
-        q1.bfs(initialState);
 
 
     }
