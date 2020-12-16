@@ -83,7 +83,7 @@ public class q1 {
     public ArrayList<state> explored = new ArrayList<>();
 
 
-    public boolean expanding(state state) {
+    public boolean expanding(state state , int numbers) {
 
 
         ArrayList tempSpace;
@@ -134,18 +134,23 @@ public class q1 {
                             System.out.println("---------");
                             newSate.howToGet = how;
                             newSate.depth = state.depth + 1;
-                            newSate.how = state.how;
-                            newSate.how.add(how);
+
+                            newSate.how = (ArrayList<String>) (state.how).clone();
+                            newSate.how.add(newSate.howToGet);
+
+
                             newSate.parent = state;
                             frontier.add(newSate);
                             newNodes.add(newSate);
 
 //                            newSate.printSpace();
 
-                            if (goalTest(newSate)) {
+                            if (goalTest(newSate , numbers)) {
 
                                 System.out.println("Goal here!!");
+                                newSate.printSpace();
                                 System.out.println("Depth of answer: " + newSate.depth);
+                                System.out.println(newSate.how.size());
                                 for (int k = 0; k < newSate.how.size(); k++) {
 
                                     System.out.println(newSate.how.get(k));
@@ -155,6 +160,7 @@ public class q1 {
 
                                 System.out.println("produced nodes:" + produced);
                                 System.out.println("Expanded nodes: " + explored.size());
+                                System.out.println("Frontier size : " + frontier.size());
 
                                 return true;
                             } else {
@@ -184,17 +190,19 @@ public class q1 {
                         newSate.howToGet = how;
                         newSate.depth = state.depth + 1;
                         newSate.parent = state;
-                        newSate.how = state.how;
+                        newSate.how = (ArrayList<String>) (state.how).clone();
                         newSate.how.add(how);
+
                         frontier.add(newSate);
                         newNodes.add(newSate);
 
 //                        newSate.printSpace();
 
-                        if (goalTest(newSate)) {
+                        if (goalTest(newSate ,numbers)) {
 
                             System.out.println("Goal here!!");
                             System.out.println("Depth of answer: " + newSate.depth);
+                            System.out.println(newSate.how.size());
                             for (int k = 0; k < newSate.how.size(); k++) {
 
                                 System.out.println(newSate.how.get(k));
@@ -204,6 +212,7 @@ public class q1 {
 
                             System.out.println("produced nodes:" + produced);
                             System.out.println("Expanded nodes: " + explored.size());
+                            System.out.println("Frontier size : " + frontier.size());
 
                             return true;
                         } else {
@@ -232,10 +241,10 @@ public class q1 {
 
     }
 
-    public void bfs(state initial) {
+    public void bfs(state initial, int numbers) {
 
 
-        frontier.add(initial);
+//        frontier.add(initial);
         boolean goal = false;
         boolean temp = false;
 
@@ -251,44 +260,51 @@ public class q1 {
 
             }
 
+//            System.out.println("frontier: ");
+//            for (int i = 0; i <frontier.size() ; i++) {
+//
+//                frontier.get(i).printSpace();
+//
+//            }
+
             state toExpand = frontier.get(0);
 
 
             frontier.remove(0);
+
             boolean redundant = false;
-
-            for (int j = 0; j < frontier.size(); j++) {
-
-
-                if (statesEqual(frontier.get(j), toExpand)) {
-
-                    redundant = true;
-                }
-
-            }
-
-            for (int j = 0; j <explored.size() ; j++) {
-
-                if (statesEqual(explored.get(j), toExpand)) {
-
-                    redundant = true;
-                }
-
-            }
+//
+//            for (int j = 0; j < frontier.size(); j++) {
+//
+//
+//                if (statesEqual(frontier.get(j), toExpand)) {
+//
+//                    redundant = true;
+//
+//                }
+//
+//            }
+//
+//            for (int j = 0; j < explored.size(); j++) {
+//
+//                if (statesEqual(explored.get(j), toExpand)) {
+//
+//                    redundant = true;
+//                }
+//
+//            }
 
             if (redundant) {
                 System.out.println("redundant!!");
-                continue;
-            }
-
-
-
-
-            else {
+//                continue;
+            } else {
                 explored.add(toExpand);
 
+                System.out.println("Going to Expand: ");
+                toExpand.printSpace();
 
-                temp = expanding(toExpand);
+
+                temp = expanding(toExpand ,numbers);
 
                 if (temp == true) {
 
@@ -297,7 +313,7 @@ public class q1 {
                 }
             }
 
-            System.out.println(frontier.size());
+//            frontier.remove(0);
 
 
         }
@@ -320,7 +336,7 @@ public class q1 {
         return true;
     }
 
-    public boolean goalTest(state state) {
+    public boolean goalTest(state state , int numbers) {
 
         char color;
 
@@ -329,7 +345,12 @@ public class q1 {
 
         for (int i = 0; i < state.GameSpace.size(); i++) {
 
-            if (state.GameSpace.get(i).size() != 0) {
+            if (state.GameSpace.get(i).size() != 0 && state.GameSpace.get(i).size() != numbers){
+                return  false;
+            }
+
+            if (state.GameSpace.get(i).size() != 0 ) {
+
                 color = state.GameSpace.get(i).get(0).color;
 
                 for (int j = 1; j < state.GameSpace.get(i).size(); j++) {
@@ -368,8 +389,6 @@ public class q1 {
     public static void main(String[] args) {
 
 
-
-
         Scanner scanner = new Scanner(System.in);
         int k = scanner.nextInt();
         int colors = scanner.nextInt();
@@ -390,7 +409,7 @@ public class q1 {
         for (int i = 0; i < k; i++) {
 
             String temp = (String) input.get(i);
-            System.out.println(temp);
+
             ArrayList<cart> spacei = new ArrayList();
 
             String[] splited = temp.split("\\s+");
@@ -412,16 +431,15 @@ public class q1 {
         }
 
 
-
         state initialState = new state();
-        initialState.GameSpace=space;
+        initialState.GameSpace = space;
 
         initialState.initial = true;
         initialState.depth = 0;
         q1 q1 = new q1();
         q1.frontier.add(initialState);
-        q1.expanding(initialState);
-
+//        q1.expanding(initialState);
+        q1.bfs(initialState ,numbers);
 
 
     }
