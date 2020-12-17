@@ -17,10 +17,7 @@ class cart {
 
     @Override
     public String toString() {
-        return "card{" +
-                "color=" + color +
-                ", number=" + number +
-                '}';
+        return number+""+color;
     }
 }
 
@@ -78,12 +75,17 @@ class state {
 
         for (int i = 0; i < GameSpace.size(); i++) {
 
-            for (int j = 0; j < GameSpace.get(i).size(); j++) {
+            if (GameSpace.get(i).size() == 0) {
+                System.out.println("#");
+            } else {
 
-                System.out.print(GameSpace.get(i).get(j));
+                for (int j = 0; j < GameSpace.get(i).size(); j++) {
+
+                    System.out.print(GameSpace.get(i).get(j) + " ");
+                }
+                System.out.println();
+
             }
-            System.out.println();
-
         }
 
         System.out.println("------------");
@@ -155,6 +157,7 @@ public class q1 {
 
 
                             newSate.parent = state;
+                            newSate.printSpace();
 
                             if (!redundant(newSate)) {
 
@@ -214,6 +217,7 @@ public class q1 {
                         newSate.parent = state;
                         newSate.how = (ArrayList<String>) (state.how).clone();
                         newSate.how.add(how);
+                        newSate.printSpace();
 
                         if (!redundant(newSate)) {
 
