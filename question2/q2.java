@@ -482,13 +482,15 @@ public class q2 {
             String[] splited = temp.split("\\s+");
 
             for (int j = 0; j < splited.length; j++) {
+                
 
                 String card = splited[j];
-                int number = Integer.parseInt(String.valueOf(card.charAt(0)));
-                char color = card.charAt(1);
-                cart cart = new cart(color, number);
-                spacei.add(cart);
-
+                if (!card.equals("#")) {
+                    int number = Integer.parseInt(String.valueOf(card.charAt(0)));
+                    char color = card.charAt(1);
+                    cart cart = new cart(color, number);
+                    spacei.add(cart);
+                }
 
             }
             space.add(spacei);
