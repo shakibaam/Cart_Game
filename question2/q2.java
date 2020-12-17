@@ -18,10 +18,7 @@ class cart {
 
     @Override
     public String toString() {
-        return "card{" +
-                "color=" + color +
-                ", number=" + number +
-                '}';
+        return number+""+color;
     }
 }
 
@@ -60,16 +57,39 @@ class states {
         return numbers;
     }
 
+
+
+    public ArrayList<Character> getColors(int index) {
+
+        ArrayList<cart> temp = GameSpace.get(index);
+        ArrayList<Character> colors = new ArrayList<>();
+
+        for (int i = 0; i < temp.size(); i++) {
+
+            colors.add(temp.get(i).color);
+        }
+
+        return colors;
+
+
+    }
+
+
     public void printSpace() {
 
         for (int i = 0; i < GameSpace.size(); i++) {
 
-            for (int j = 0; j < GameSpace.get(i).size(); j++) {
+            if (GameSpace.get(i).size() == 0) {
+                System.out.println("#");
+            } else {
 
-                System.out.print(GameSpace.get(i).get(j));
+                for (int j = 0; j < GameSpace.get(i).size(); j++) {
+
+                    System.out.print(GameSpace.get(i).get(j) + " ");
+                }
+                System.out.println();
+
             }
-            System.out.println();
-
         }
 
         System.out.println("------------");
@@ -140,11 +160,11 @@ public class q2 {
 
                             newSate.howToGet = how;
                             newSate.depth = state.depth + 1;
-                            newSate.how = state.how;
+                            newSate.how = (ArrayList<String>) (state.how).clone();
                             newSate.how.add(how);
                             newSate.parent = state;
 
-                            System.out.println("counter: "+ counter);
+                            System.out.println("counter: " + counter);
 
                             frontier.add(counter, newSate);
 
@@ -178,9 +198,9 @@ public class q2 {
                         newSate.howToGet = how;
                         newSate.depth = state.depth + 1;
                         newSate.parent = state;
-                        newSate.how = state.how;
+                        newSate.how = (ArrayList<String>) (state.how).clone();
                         newSate.how.add(how);
-                        System.out.println("counter: "+ counter);
+                        System.out.println("counter: " + counter);
                         frontier.add(counter, newSate);
 
 
@@ -203,7 +223,11 @@ public class q2 {
 
         System.out.println("Expanding this node finish...");
         System.out.println("******");
-        counter=0;
+        System.out.println("Frontier: ");
+        for (int i = 0; i <frontier.size() ; i++) {
+            frontier.get(i).printSpace();
+        }
+        counter = 0;
         explored.add(state);
 
 
@@ -240,16 +264,16 @@ public class q2 {
 //    }
 
 
-    public boolean IDS(int limit) {
+    public boolean IDS(int limit , int numbers) {
 
-        for (int i = 0; i <=limit ; i++) {
+        for (int i = 0; i <= limit; i++) {
 
-            System.out.println("DLS: "+ i);
+            System.out.println("DLS: " + i);
 
-            if (DLS(i)){
+            if (DLS(i , numbers)) {
 
                 System.out.println("Yaaay!!");
-                return  true;
+                return true;
             }
 
         }
@@ -259,67 +283,76 @@ public class q2 {
     }
 
 
-    public boolean DLS(int limit) {
+    public boolean DLS(int limit , int numbers) {
 
         boolean goal = false;
 
 
         if (limit == 0) {
 
-            if (goalTest(frontier.get(0))) {
+            if (goalTest(frontier.get(0) ,numbers)) {
 
                 goal = true;
                 return true;
             } else return false;
-        }
-
-        else {
+        } else {
 
             boolean superFlag = true;
             while (superFlag) {
-                System.out.println(frontier.size());
-
-                if (frontier.isEmpty()){
 
 
-                        for (int i = 0; i < explored.size(); i++) {
-                            if (goalTest(explored.get(i))) {
-                                return true;
-                            } else {
+                if (frontier.isEmpty()) {
 
-                                explored.remove(i);
-                            }
+
+                    for (int i = 0; i < explored.size(); i++) {
+                        if (goalTest(explored.get(i) , numbers)) {
+                            return true;
+                        } else {
+
+                            explored.remove(i);
                         }
-                    superFlag=false;
+                    }
+                    superFlag = false;
+
                     System.out.println("No GOAL Found :(");
-                        return  false;
+                    return false;
 
 
                 }
 
                 states toexpand = frontier.get(0);
+//                System.out.println("going to expand: ");
+//                toexpand.printSpace();
                 if (toexpand.depth == limit) {
+
+
 
 
                     boolean stillCutOff = true;
                     while (stillCutOff) {
 
 
-                            states temp = frontier.get(0);
+                        states temp = frontier.get(0);
+
                         if (temp.depth == limit) {
 
-                            if (goalTest(temp)) {
+                            if (goalTest(temp ,numbers)) {
                                 System.out.println("Goal!!");
+                                temp.printSpace();
                                 return true;
                             } else {
 
+
                                 frontier.remove(0);
-                                if (frontier.size()==0){
+                                if (frontier.size() == 0) {
+
 
                                     states temp1 = explored.get(explored.size() - 1);
-                                    if (goalTest(temp1)) {
+
+                                    if (goalTest(temp1 ,  numbers)) {
 
                                         System.out.println("Goal");
+                                        temp1.printSpace();
                                         return true;
                                     } else {
                                         explored.remove(explored.size() - 1);
@@ -332,10 +365,14 @@ public class q2 {
                             }
                         } else {
 
+
+
                             states temp1 = explored.get(explored.size() - 1);
-                            if (goalTest(temp1)) {
+
+                            if (goalTest(temp1 ,  numbers)) {
 
                                 System.out.println("Goal");
+                                temp1.printSpace();
                                 return true;
                             } else {
                                 explored.remove(explored.size() - 1);
@@ -344,15 +381,16 @@ public class q2 {
 
                             stillCutOff = false;
 
+
+
                         }
                     }
-
 
 
                 } else {
 
                     frontier.remove(0);
-                    toexpand.printSpace();
+
                     expanding(toexpand);
                 }
 
@@ -361,32 +399,39 @@ public class q2 {
 
         System.out.println("No GOAL Found :(");
 
-        return  false;
+
+        return false;
     }
 
-    public boolean goalTest(states state) {
+
+    public boolean goalTest(states state, int numbers) {
 
         char color;
-//        boolean colSame = true;
+
         boolean sorted = true;
 
 
         for (int i = 0; i < state.GameSpace.size(); i++) {
 
+            if (state.GameSpace.get(i).size() != 0 && state.GameSpace.get(i).size() != numbers) {
+                return false;
+            }
+
             if (state.GameSpace.get(i).size() != 0) {
+
                 color = state.GameSpace.get(i).get(0).color;
 
                 for (int j = 1; j < state.GameSpace.get(i).size(); j++) {
 
-                    if (state.GameSpace.get(i).get(j).color != color) {
-//                        colSame = false;
+                    if ((state.GameSpace.get(i).get(j).color != color)) {
+
                         return false;
                     }
 
 
                 }
 
-                sorted = isCollectionSorted(state.GameSpace.get(i));
+                sorted = isCollectionSorted(state.getNumbers(i));
                 if (sorted == false) {
                     return false;
                 }
@@ -398,10 +443,7 @@ public class q2 {
         return true;
 
 
-
-
     }
-
 
 
     public boolean isCollectionSorted(ArrayList list) {
@@ -415,130 +457,175 @@ public class q2 {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-//        int k=scanner.nextInt();
-//        int colors=scanner.nextInt();
-//        int numbers=scanner.nextInt();
-        String card = "";
+        int k = scanner.nextInt();
+        int colors = scanner.nextInt();
+        int numbers = scanner.nextInt();
+        ArrayList input = new ArrayList();
+        ArrayList<ArrayList<cart>> space = new ArrayList<>();
+
+        for (int i = 0; i <= k; i++) {
 
 
-        ArrayList<cart> k1 = new ArrayList();
-        card = "5g";
-        int number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        char color = card.charAt(1);
-        cart g5 = new cart(color, number);
+            String str = scanner.nextLine();
+            input.add(str);
+
+        }
+        input.remove(0);
 
 
-        card = "5r";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart r5 = new cart(color, number);
+        for (int i = 0; i < k; i++) {
 
-        card = "4y";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart y4 = new cart(color, number);
+            String temp = (String) input.get(i);
 
-        k1.add(g5);
-        k1.add(r5);
-        k1.add(y4);
+            ArrayList<cart> spacei = new ArrayList();
 
-        ArrayList<cart> k2 = new ArrayList();
+            String[] splited = temp.split("\\s+");
 
-        card = "2g";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart g2 = new cart(color, number);
+            for (int j = 0; j < splited.length; j++) {
 
-        card = "4r";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart r4 = new cart(color, number);
+                String card = splited[j];
+                int number = Integer.parseInt(String.valueOf(card.charAt(0)));
+                char color = card.charAt(1);
+                cart cart = new cart(color, number);
+                spacei.add(cart);
 
 
-        card = "3y";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart y3 = new cart(color, number);
+            }
+            space.add(spacei);
 
-        card = "3g";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart g3 = new cart(color, number);
-
-        card = "2y";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart y2 = new cart(color, number);
-
-        k2.add(g2);
-        k2.add(r4);
-        k2.add(y3);
-        k2.add(g3);
-        k2.add(y2);
-
-        ArrayList<cart> k3 = new ArrayList();
-
-        card = "1y";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart y1 = new cart(color, number);
-
-        card = "4g";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart g4 = new cart(color, number);
-
-        card = "1r";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart r1 = new cart(color, number);
-
-        k3.add(y1);
-        k3.add(g4);
-        k3.add(r1);
-
-        ArrayList<cart> k4 = new ArrayList();
+        }
 
 
-        card = "1g";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart g1 = new cart(color, number);
-
-        card = "2r";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart r2 = new cart(color, number);
-
-        card = "5y";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart y5 = new cart(color, number);
-
-        card = "3r";
-        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-        color = card.charAt(1);
-        cart r3 = new cart(color, number);
-
-        k4.add(g1);
-        k4.add(r2);
-        k4.add(y5);
-        k4.add(r3);
-
-        ArrayList<cart> k5 = new ArrayList();
 
         states initialState = new states();
-        initialState.GameSpace.add(k1);
-        initialState.GameSpace.add(k2);
-        initialState.GameSpace.add(k3);
-        initialState.GameSpace.add(k4);
-        initialState.GameSpace.add(k5);
+        initialState.GameSpace=space;
+
         initialState.initial = true;
         initialState.depth = 0;
         q2 q2 = new q2();
         q2.frontier.add(initialState);
+        q2.DLS(2,numbers);
 
-       q2.IDS(400);
+//
+//        String card = "";
+//
+//
+//        ArrayList<cart> k1 = new ArrayList();
+//        card = "5g";
+//        int number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        char color = card.charAt(1);
+//        cart g5 = new cart(color, number);
+//
+//
+//        card = "5r";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart r5 = new cart(color, number);
+//
+//        card = "4y";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart y4 = new cart(color, number);
+//
+//        k1.add(g5);
+//        k1.add(r5);
+//        k1.add(y4);
+//
+//        ArrayList<cart> k2 = new ArrayList();
+//
+//        card = "2g";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart g2 = new cart(color, number);
+//
+//        card = "4r";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart r4 = new cart(color, number);
+//
+//
+//        card = "3y";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart y3 = new cart(color, number);
+//
+//        card = "3g";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart g3 = new cart(color, number);
+//
+//        card = "2y";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart y2 = new cart(color, number);
+//
+//        k2.add(g2);
+//        k2.add(r4);
+//        k2.add(y3);
+//        k2.add(g3);
+//        k2.add(y2);
+//
+//        ArrayList<cart> k3 = new ArrayList();
+//
+//        card = "1y";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart y1 = new cart(color, number);
+//
+//        card = "4g";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart g4 = new cart(color, number);
+//
+//        card = "1r";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart r1 = new cart(color, number);
+//
+//        k3.add(y1);
+//        k3.add(g4);
+//        k3.add(r1);
+//
+//        ArrayList<cart> k4 = new ArrayList();
+//
+//
+//        card = "1g";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart g1 = new cart(color, number);
+//
+//        card = "2r";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart r2 = new cart(color, number);
+//
+//        card = "5y";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart y5 = new cart(color, number);
+//
+//        card = "3r";
+//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
+//        color = card.charAt(1);
+//        cart r3 = new cart(color, number);
+//
+//        k4.add(g1);
+//        k4.add(r2);
+//        k4.add(y5);
+//        k4.add(r3);
+//
+//        ArrayList<cart> k5 = new ArrayList();
+
+//        states initialState = new states();
+//        initialState.GameSpace.add(k1);
+//        initialState.GameSpace.add(k2);
+//        initialState.GameSpace.add(k3);
+//        initialState.GameSpace.add(k4);
+//        initialState.GameSpace.add(k5);
+//        initialState.initial = true;
+//        initialState.depth = 0;
+//        q2 q2 = new q2();
+//        q2.frontier.add(initialState);
 
 
 
