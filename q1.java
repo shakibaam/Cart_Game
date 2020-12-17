@@ -59,6 +59,21 @@ class state {
         return numbers;
     }
 
+    public  ArrayList<Character> getColors(int index){
+
+        ArrayList<cart> temp = GameSpace.get(index);
+        ArrayList<Character> colors = new ArrayList<>();
+
+        for (int i = 0; i < temp.size(); i++) {
+
+            colors.add(temp.get(i).color);
+        }
+
+        return colors;
+
+
+    }
+
     public void printSpace() {
 
         for (int i = 0; i < GameSpace.size(); i++) {
@@ -241,6 +256,26 @@ public class q1 {
 
     }
 
+
+    public boolean redundant(state state){
+
+        for (int i = 0; i <frontier.size() ; i++) {
+
+            if (statesEqual(frontier.get(i) ,state)){
+                return true;
+            }
+        }
+        for (int i = 0; i <explored.size() ; i++) {
+
+            if (statesEqual(explored.get(i) , state)){
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
     public void bfs(state initial, int numbers) {
 
 
@@ -251,7 +286,7 @@ public class q1 {
 
         while (!goal) {
 
-//        for (int i = 0; i <10; i++) {
+
 
 
             if (frontier.isEmpty()) {
@@ -260,12 +295,7 @@ public class q1 {
 
             }
 
-//            System.out.println("frontier: ");
-//            for (int i = 0; i <frontier.size() ; i++) {
-//
-//                frontier.get(i).printSpace();
-//
-//            }
+
 
             state toExpand = frontier.get(0);
 
@@ -273,29 +303,37 @@ public class q1 {
             frontier.remove(0);
 
             boolean redundant = false;
-//
+
 //            for (int j = 0; j < frontier.size(); j++) {
 //
 //
 //                if (statesEqual(frontier.get(j), toExpand)) {
 //
-//                    redundant = true;
+////                    redundant = true;
+//                    System.out.println("redundant (available in frontier)");
+//                    System.out.println("^^^^^^^^^^^^");
+//                    toExpand.printSpace();
+//                    System.out.println("##########");
 //
 //                }
 //
 //            }
-//
+
 //            for (int j = 0; j < explored.size(); j++) {
 //
 //                if (statesEqual(explored.get(j), toExpand)) {
 //
-//                    redundant = true;
+////                    redundant = true;
+//                    System.out.println("redundant (available in explored)");
+//                    System.out.println("^^^^^^^^^^^^");
+//                    toExpand.printSpace();
+//                    System.out.println("##########");
 //                }
 //
 //            }
 
             if (redundant) {
-                System.out.println("redundant!!");
+//                System.out.println("redundant!!");
 //                continue;
             } else {
                 explored.add(toExpand);
@@ -316,6 +354,7 @@ public class q1 {
 //            frontier.remove(0);
 
 
+
         }
 
 
@@ -327,7 +366,7 @@ public class q1 {
         for (int i = 0; i < state1.GameSpace.size(); i++) {
 
 
-            if (!state1.getNumbers(i).equals(state2.getNumbers(i))) {
+            if ((!state1.getNumbers(i).equals(state2.getNumbers(i))) ||  (!state1.getColors(i).equals(state2.getColors(i))) ) {
                 return false;
             }
 
@@ -355,7 +394,7 @@ public class q1 {
 
                 for (int j = 1; j < state.GameSpace.get(i).size(); j++) {
 
-                    if (state.GameSpace.get(i).get(j).color != color) {
+                    if ((state.GameSpace.get(i).get(j).color != color)) {
 
                         return false;
                     }
