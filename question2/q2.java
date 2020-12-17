@@ -223,10 +223,7 @@ public class q2 {
 
         System.out.println("Expanding this node finish...");
         System.out.println("******");
-        System.out.println("Frontier: ");
-        for (int i = 0; i <frontier.size() ; i++) {
-            frontier.get(i).printSpace();
-        }
+
         counter = 0;
         explored.add(state);
 
@@ -264,37 +261,62 @@ public class q2 {
 //    }
 
 
-    public boolean IDS(int limit , int numbers) {
+    public void IDS(int limit , int numbers , states initial) {
+        ArrayList frontierCopy= (ArrayList) new ArrayList();
+        ArrayList exploredCopy= (ArrayList) new ArrayList();
 
-        for (int i = 0; i <= limit; i++) {
 
-            System.out.println("DLS: " + i);
 
-            if (DLS(i , numbers)) {
 
-                System.out.println("Yaaay!!");
-                return true;
-            }
 
-        }
+           int count=0;
+           while (count<=limit){
+               System.out.println("DLS"+" "+count);
+               DLS(count,numbers , initial);
+               for (int i = 0; i <frontier.size() ; i++) {
+                   frontierCopy.add(frontier.get(i));
+               }
 
-        return false;
+               for (int i = 0; i <explored.size() ; i++) {
+                   exploredCopy.add(explored.get(i));
+               }
+
+
+               frontier.clear();
+               explored.clear();
+               frontier.add(initial);
+               count++;
+
+           }
+
+//        System.out.println("all frontier: "+ frontierCopy.size());
+//        System.out.println("all produced: "+ frontierCopy.size()+exploredCopy.size());
+
+
+
 
     }
 
 
-    public boolean DLS(int limit , int numbers) {
+    public boolean DLS(int limit , int numbers ,states initial) {
+//        frontier.add(initial);
+
 
         boolean goal = false;
 
 
         if (limit == 0) {
 
+
             if (goalTest(frontier.get(0) ,numbers)) {
 
                 goal = true;
                 return true;
-            } else return false;
+            } else {
+                System.out.println("No Goal!!");
+                return false;
+
+            }
         } else {
 
             boolean superFlag = true;
@@ -321,8 +343,8 @@ public class q2 {
                 }
 
                 states toexpand = frontier.get(0);
-//                System.out.println("going to expand: ");
-//                toexpand.printSpace();
+                System.out.println("going to expand: ");
+                toexpand.printSpace();
                 if (toexpand.depth == limit) {
 
 
@@ -338,9 +360,21 @@ public class q2 {
 
                             if (goalTest(temp ,numbers)) {
                                 System.out.println("Goal!!");
+                                System.out.println("Depth: "+temp.depth);
+                                for (int k = 0; k < temp.how.size(); k++) {
+
+                                    System.out.println(temp.how.get(k));
+                                }
+
+                                System.out.println("produced nodes:" + explored.size()+frontier.size());
+                                System.out.println("Expanded nodes: " + explored.size());
+                                System.out.println("Frontier size : " + frontier.size());
+
+
                                 temp.printSpace();
                                 return true;
                             } else {
+
 
 
                                 frontier.remove(0);
@@ -355,6 +389,9 @@ public class q2 {
                                         temp1.printSpace();
                                         return true;
                                     } else {
+
+                                        System.out.println("removing");
+                                        explored.get(explored.size()-1).printSpace();
                                         explored.remove(explored.size() - 1);
                                     }
 
@@ -375,6 +412,8 @@ public class q2 {
                                 temp1.printSpace();
                                 return true;
                             } else {
+
+
                                 explored.remove(explored.size() - 1);
                             }
 
@@ -398,6 +437,9 @@ public class q2 {
         }
 
         System.out.println("No GOAL Found :(");
+//        frontier.clear();
+//        explored.clear();
+
 
 
         return false;
@@ -482,7 +524,7 @@ public class q2 {
             String[] splited = temp.split("\\s+");
 
             for (int j = 0; j < splited.length; j++) {
-                
+
 
                 String card = splited[j];
                 if (!card.equals("#")) {
@@ -505,129 +547,24 @@ public class q2 {
         initialState.initial = true;
         initialState.depth = 0;
         q2 q2 = new q2();
-        q2.frontier.add(initialState);
-        q2.DLS(2,numbers);
-
-//
-//        String card = "";
-//
-//
-//        ArrayList<cart> k1 = new ArrayList();
-//        card = "5g";
-//        int number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        char color = card.charAt(1);
-//        cart g5 = new cart(color, number);
-//
-//
-//        card = "5r";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart r5 = new cart(color, number);
-//
-//        card = "4y";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart y4 = new cart(color, number);
-//
-//        k1.add(g5);
-//        k1.add(r5);
-//        k1.add(y4);
-//
-//        ArrayList<cart> k2 = new ArrayList();
-//
-//        card = "2g";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart g2 = new cart(color, number);
-//
-//        card = "4r";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart r4 = new cart(color, number);
-//
-//
-//        card = "3y";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart y3 = new cart(color, number);
-//
-//        card = "3g";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart g3 = new cart(color, number);
-//
-//        card = "2y";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart y2 = new cart(color, number);
-//
-//        k2.add(g2);
-//        k2.add(r4);
-//        k2.add(y3);
-//        k2.add(g3);
-//        k2.add(y2);
-//
-//        ArrayList<cart> k3 = new ArrayList();
-//
-//        card = "1y";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart y1 = new cart(color, number);
-//
-//        card = "4g";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart g4 = new cart(color, number);
-//
-//        card = "1r";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart r1 = new cart(color, number);
-//
-//        k3.add(y1);
-//        k3.add(g4);
-//        k3.add(r1);
-//
-//        ArrayList<cart> k4 = new ArrayList();
-//
-//
-//        card = "1g";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart g1 = new cart(color, number);
-//
-//        card = "2r";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart r2 = new cart(color, number);
-//
-//        card = "5y";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart y5 = new cart(color, number);
-//
-//        card = "3r";
-//        number = Integer.parseInt(String.valueOf(card.charAt(0)));
-//        color = card.charAt(1);
-//        cart r3 = new cart(color, number);
-//
-//        k4.add(g1);
-//        k4.add(r2);
-//        k4.add(y5);
-//        k4.add(r3);
-//
-//        ArrayList<cart> k5 = new ArrayList();
-
-//        states initialState = new states();
-//        initialState.GameSpace.add(k1);
-//        initialState.GameSpace.add(k2);
-//        initialState.GameSpace.add(k3);
-//        initialState.GameSpace.add(k4);
-//        initialState.GameSpace.add(k5);
-//        initialState.initial = true;
-//        initialState.depth = 0;
-//        q2 q2 = new q2();
 //        q2.frontier.add(initialState);
+//        System.out.println("DLS 0");
+//        q2.frontier.add(initialState);
+//        q2.DLS(0,numbers ,initialState);
+//        q2.frontier.add(initialState);
+//        System.out.println("DLS 1");
+//        q2.DLS(1,numbers ,initialState);
+//        System.out.println(q2.frontier.size());
+//        q2.frontier.add(initialState);
+//        System.out.println("DLS 2");
+//        q2.frontier.clear();
+        q2.frontier.add(initialState);
+//        q2.DLS(2,numbers , initialState);
+        q2.IDS(2,numbers ,initialState);
+
+
+
+
 
 
 
