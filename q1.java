@@ -59,7 +59,7 @@ class state {
         return numbers;
     }
 
-    public  ArrayList<Character> getColors(int index){
+    public ArrayList<Character> getColors(int index) {
 
         ArrayList<cart> temp = GameSpace.get(index);
         ArrayList<Character> colors = new ArrayList<>();
@@ -98,7 +98,7 @@ public class q1 {
     public ArrayList<state> explored = new ArrayList<>();
 
 
-    public boolean expanding(state state , int numbers) {
+    public boolean expanding(state state, int numbers) {
 
 
         ArrayList tempSpace;
@@ -155,12 +155,19 @@ public class q1 {
 
 
                             newSate.parent = state;
-                            frontier.add(newSate);
-                            newNodes.add(newSate);
+
+                            if (!redundant(newSate)) {
+
+                                frontier.add(newSate);
+                                newNodes.add(newSate);
+                            } else {
+
+                                System.out.println("Sorry this node is available");
+                            }
 
 //                            newSate.printSpace();
 
-                            if (goalTest(newSate , numbers)) {
+                            if (goalTest(newSate, numbers)) {
 
                                 System.out.println("Goal here!!");
                                 newSate.printSpace();
@@ -208,12 +215,18 @@ public class q1 {
                         newSate.how = (ArrayList<String>) (state.how).clone();
                         newSate.how.add(how);
 
-                        frontier.add(newSate);
-                        newNodes.add(newSate);
+                        if (!redundant(newSate)) {
+
+                            frontier.add(newSate);
+                            newNodes.add(newSate);
+                        } else {
+
+                            System.out.println("Sorry this node is available");
+                        }
 
 //                        newSate.printSpace();
 
-                        if (goalTest(newSate ,numbers)) {
+                        if (goalTest(newSate, numbers)) {
 
                             System.out.println("Goal here!!");
                             System.out.println("Depth of answer: " + newSate.depth);
@@ -257,17 +270,17 @@ public class q1 {
     }
 
 
-    public boolean redundant(state state){
+    public boolean redundant(state state) {
 
-        for (int i = 0; i <frontier.size() ; i++) {
+        for (int i = 0; i < frontier.size(); i++) {
 
-            if (statesEqual(frontier.get(i) ,state)){
+            if (statesEqual(frontier.get(i), state)) {
                 return true;
             }
         }
-        for (int i = 0; i <explored.size() ; i++) {
+        for (int i = 0; i < explored.size(); i++) {
 
-            if (statesEqual(explored.get(i) , state)){
+            if (statesEqual(explored.get(i), state)) {
                 return true;
             }
 
@@ -287,8 +300,6 @@ public class q1 {
         while (!goal) {
 
 
-
-
             if (frontier.isEmpty()) {
 
                 System.out.println("No answer...!");
@@ -296,63 +307,27 @@ public class q1 {
             }
 
 
-
             state toExpand = frontier.get(0);
 
 
             frontier.remove(0);
 
-            boolean redundant = false;
 
-//            for (int j = 0; j < frontier.size(); j++) {
-//
-//
-//                if (statesEqual(frontier.get(j), toExpand)) {
-//
-////                    redundant = true;
-//                    System.out.println("redundant (available in frontier)");
-//                    System.out.println("^^^^^^^^^^^^");
-//                    toExpand.printSpace();
-//                    System.out.println("##########");
-//
-//                }
-//
-//            }
+            explored.add(toExpand);
 
-//            for (int j = 0; j < explored.size(); j++) {
-//
-//                if (statesEqual(explored.get(j), toExpand)) {
-//
-////                    redundant = true;
-//                    System.out.println("redundant (available in explored)");
-//                    System.out.println("^^^^^^^^^^^^");
-//                    toExpand.printSpace();
-//                    System.out.println("##########");
-//                }
-//
-//            }
-
-            if (redundant) {
-//                System.out.println("redundant!!");
-//                continue;
-            } else {
-                explored.add(toExpand);
-
-                System.out.println("Going to Expand: ");
-                toExpand.printSpace();
+            System.out.println("Going to Expand: ");
+            toExpand.printSpace();
 
 
-                temp = expanding(toExpand ,numbers);
+            temp = expanding(toExpand, numbers);
 
-                if (temp == true) {
+            if (temp == true) {
 
-                    goal = true;
-                    System.out.println("algorithm finish...");
-                }
+                goal = true;
+                System.out.println("algorithm finish...");
             }
 
-//            frontier.remove(0);
-
+            System.out.println("Frontier: "+ frontier.size());
 
 
         }
@@ -363,19 +338,30 @@ public class q1 {
 
     public boolean statesEqual(state state1, state state2) {
 
+
+
         for (int i = 0; i < state1.GameSpace.size(); i++) {
 
+//            if (state1.GameSpace.get(i).size()==0 && state2.GameSpace.get(i).size()!=0){
+//                return false;
+//            }
+//
+//            if (state1.GameSpace.get(i).size()!=0 && state2.GameSpace.get(i).size()==0){
+//                return false;
+//            }
 
-            if ((!state1.getNumbers(i).equals(state2.getNumbers(i))) ||  (!state1.getColors(i).equals(state2.getColors(i))) ) {
+
+            if ((!state1.getNumbers(i).equals(state2.getNumbers(i))) || (!state1.getColors(i).equals(state2.getColors(i)))) {
                 return false;
             }
 
         }
 
+
         return true;
     }
 
-    public boolean goalTest(state state , int numbers) {
+    public boolean goalTest(state state, int numbers) {
 
         char color;
 
@@ -384,11 +370,11 @@ public class q1 {
 
         for (int i = 0; i < state.GameSpace.size(); i++) {
 
-            if (state.GameSpace.get(i).size() != 0 && state.GameSpace.get(i).size() != numbers){
-                return  false;
+            if (state.GameSpace.get(i).size() != 0 && state.GameSpace.get(i).size() != numbers) {
+                return false;
             }
 
-            if (state.GameSpace.get(i).size() != 0 ) {
+            if (state.GameSpace.get(i).size() != 0) {
 
                 color = state.GameSpace.get(i).get(0).color;
 
@@ -478,7 +464,7 @@ public class q1 {
         q1 q1 = new q1();
         q1.frontier.add(initialState);
 //        q1.expanding(initialState);
-        q1.bfs(initialState ,numbers);
+        q1.bfs(initialState, numbers);
 
 
     }
