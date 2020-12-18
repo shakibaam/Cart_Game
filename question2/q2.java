@@ -157,8 +157,8 @@ public class q2 {
 
 
                             String how = card1.number + "" + card1.color + " from " + i + " to " + j;
-                            System.out.println("new state reach by: " + how);
-                            System.out.println("---------");
+//                            System.out.println("new state reach by: " + how);
+//                            System.out.println("---------");
 
                             newSate.howToGet = how;
                             newSate.depth = state.depth + 1;
@@ -166,7 +166,7 @@ public class q2 {
                             newSate.how.add(how);
                             newSate.parent = state;
 
-                            System.out.println("counter: " + counter);
+//                            System.out.println("counter: " + counter);
 
                             frontier.add(counter, newSate);
                             frontierCopy.add(newSate);
@@ -195,15 +195,15 @@ public class q2 {
 
 
                         String how = card1.number + "" + card1.color + " from " + i + " to " + j;
-                        System.out.println("new state reach by: " + how);
-                        System.out.println("---------");
+//                        System.out.println("new state reach by: " + how);
+//                        System.out.println("---------");
 
                         newSate.howToGet = how;
                         newSate.depth = state.depth + 1;
                         newSate.parent = state;
                         newSate.how = (ArrayList<String>) (state.how).clone();
                         newSate.how.add(how);
-                        System.out.println("counter: " + counter);
+//                        System.out.println("counter: " + counter);
                         frontier.add(counter, newSate);
                         frontierCopy.add(newSate);
 //                        frontierCopy.addAll(frontier);
@@ -226,8 +226,8 @@ public class q2 {
 
         }
 
-        System.out.println("Expanding this node finish...");
-        System.out.println("******");
+//        System.out.println("Expanding this node finish...");
+//        System.out.println("******");
 
 
         counter = 0;
@@ -321,16 +321,16 @@ public class q2 {
                     superFlag = false;
 
                     System.out.println("No GOAL Found :(");
-                    System.out.println("exploredcopy: " + exploredCopy.size());
-                    System.out.println("frontiercopy: " + frontierCopy.size());
+//                    System.out.println("exploredcopy: " + exploredCopy.size());
+//                    System.out.println("frontiercopy: " + frontierCopy.size());
                     return false;
 
 
                 }
 
                 states toexpand = frontier.get(0);
-                System.out.println("going to expand: ");
-                toexpand.printSpace();
+//                System.out.println("going to expand: ");
+//                toexpand.printSpace();
                 if (toexpand.depth == limit) {
 
 
@@ -349,7 +349,7 @@ public class q2 {
 
                                     System.out.println(temp.how.get(k));
                                 }
-                                System.out.println("exploredcopy: " + exploredCopy.size());
+                                System.out.println("explored: " + exploredCopy.size());
 //                                System.out.println("frontiercopy: " + frontierCopy.size());
                                 int x = exploredCopy.size() + frontierCopy.size();
                                 System.out.println("produced nodes:" + x);
@@ -375,7 +375,7 @@ public class q2 {
 
                                             System.out.println(temp.how.get(k));
                                         }
-                                        System.out.println("exploredcopy: " + exploredCopy.size());
+                                        System.out.println("explored: " + exploredCopy.size());
 //                                System.out.println("frontiercopy: " + frontierCopy.size());
                                         int x = exploredCopy.size() + frontierCopy.size();
                                         System.out.println("produced nodes:" + x);
@@ -399,7 +399,7 @@ public class q2 {
                             if (goalTest(temp1, numbers)) {
 
                                 System.out.println("Goal");
-                                System.out.println("exploredcopy: " + exploredCopy.size());
+                                System.out.println("explored: " + exploredCopy.size());
 //                                System.out.println("frontiercopy: " + frontierCopy.size());
                                 System.out.println("produced nodes:" + exploredCopy.size() + frontierCopy.size());
                                 temp1.printSpace();
