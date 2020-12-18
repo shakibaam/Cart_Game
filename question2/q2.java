@@ -19,7 +19,7 @@ class cart {
 
     @Override
     public String toString() {
-        return number+""+color;
+        return number + "" + color;
     }
 }
 
@@ -57,7 +57,6 @@ class states {
 
         return numbers;
     }
-
 
 
     public ArrayList<Character> getColors(int index) {
@@ -103,8 +102,8 @@ public class q2 {
 
     public ArrayList<states> frontier = new ArrayList<>();
     public ArrayList<states> explored = new ArrayList<>();
-    ArrayList <states> frontierCopy=  new ArrayList();
-    ArrayList<states> exploredCopy=  new ArrayList();
+    ArrayList<states> frontierCopy = new ArrayList();
+    ArrayList<states> exploredCopy = new ArrayList();
 
     states cloning = new states();
     int counter = 0;
@@ -112,13 +111,12 @@ public class q2 {
 
     public void expanding(states state) {
 
-//        System.out.println("^^^"+frontier.size());
+
         ArrayList tempSpace;
         ArrayList tempSpace1;
 
 
         ArrayList<states> newNodes = new ArrayList();
-
 
 
         for (int i = 0; i < state.GameSpace.size(); i++) {
@@ -234,11 +232,6 @@ public class q2 {
 
         counter = 0;
         explored.add(state);
-//        exploredCopy.addAll(explored);
-//        frontierCopy.addAll(frontier);
-//        System.out.println("frontier: "+ frontier.size());
-//        System.out.println("frontier: "+ frontierCopy.size());
-//        System.out.println("explored: "+exploredCopy.size());
 
 
         state.expand = true;
@@ -246,32 +239,27 @@ public class q2 {
     }
 
 
+    public void IDS(int limit, int numbers, states initial) {
 
-    public void IDS(int limit , int numbers , states initial) {
-//        ArrayList frontierCopy= (ArrayList) new ArrayList();
-//        ArrayList exploredCopy= (ArrayList) new ArrayList();
-        ArrayList<ArrayList> forOutPut=new ArrayList<>();
+        ArrayList<ArrayList> forOutPut = new ArrayList<>();
 
 
+        int count = 0;
+        while (count <= limit) {
+            System.out.println("DLS" + " " + count);
+            boolean goal=DLS(count, numbers, initial);
+            if (goal){
+                return;
+            }
+
+            frontier.clear();
+            explored.clear();
+
+            frontier.add(initial);
+            count++;
 
 
-
-           int count=0;
-           while (count<=limit){
-               System.out.println("DLS"+" "+count);
-               DLS(count,numbers , initial);
-
-               frontier.clear();
-               explored.clear();
-
-               frontier.add(initial);
-               count++;
-
-
-           }
-
-//        System.out.println("all frontier: "+ frontierCopy.size());
-//        System.out.println("all produced: "+ frontierCopy.size()+exploredCopy.size());
+        }
 
 
 
@@ -279,10 +267,10 @@ public class q2 {
     }
 
 
-    public boolean DLS(int limit , int numbers ,states initial) {
-//        frontier.add(initial);
-        int produce=0;
-        int expand=0;
+    public boolean DLS(int limit, int numbers, states initial) {
+
+        int produce = 0;
+        int expand = 0;
 
 
         boolean goal = false;
@@ -291,9 +279,12 @@ public class q2 {
         if (limit == 0) {
 
 
-            if (goalTest(frontier.get(0) ,numbers)) {
+            if (goalTest(initial, numbers)) {
 
                 goal = true;
+                System.out.println("Goalll");
+                System.out.println("Expanded: 0");
+                System.out.println("produced: 1");
 
                 return true;
             } else {
@@ -315,9 +306,9 @@ public class q2 {
 
                 if (frontier.isEmpty()) {
 
-                    Iterator iterator=explored.iterator();
+                    Iterator iterator = explored.iterator();
 
-                    while (iterator.hasNext()){
+                    while (iterator.hasNext()) {
 
                         if (goalTest((states) iterator.next(), numbers)) {
                             return true;
@@ -330,8 +321,8 @@ public class q2 {
                     superFlag = false;
 
                     System.out.println("No GOAL Found :(");
-                    System.out.println("exploredcopy: "+ exploredCopy.size());
-                    System.out.println("frontiercopy: "+ frontierCopy.size());
+                    System.out.println("exploredcopy: " + exploredCopy.size());
+                    System.out.println("frontiercopy: " + frontierCopy.size());
                     return false;
 
 
@@ -343,8 +334,6 @@ public class q2 {
                 if (toexpand.depth == limit) {
 
 
-
-
                     boolean stillCutOff = true;
                     while (stillCutOff) {
 
@@ -353,18 +342,17 @@ public class q2 {
 
                         if (temp.depth == limit) {
 
-                            if (goalTest(temp ,numbers)) {
+                            if (goalTest(temp, numbers)) {
                                 System.out.println("Goal!!");
-                                System.out.println("Depth: "+temp.depth);
+                                System.out.println("Depth: " + temp.depth);
                                 for (int k = 0; k < temp.how.size(); k++) {
 
                                     System.out.println(temp.how.get(k));
                                 }
-                                System.out.println("exploredcopy: "+ exploredCopy.size());
-                                System.out.println("frontiercopy: "+ frontierCopy.size());
-                                int x=exploredCopy.size()+frontierCopy.size();
-                                System.out.println("produced nodes:" +x );
-
+                                System.out.println("exploredcopy: " + exploredCopy.size());
+//                                System.out.println("frontiercopy: " + frontierCopy.size());
+                                int x = exploredCopy.size() + frontierCopy.size();
+                                System.out.println("produced nodes:" + x);
 
 
                                 temp.printSpace();
@@ -372,23 +360,29 @@ public class q2 {
                             } else {
 
 
-                                System.out.println("removing");
-                                frontier.get(0).printSpace();
                                 frontier.remove(0);
                                 if (frontier.size() == 0) {
 
 
                                     states temp1 = explored.get(explored.size() - 1);
 
-                                    if (goalTest(temp1 ,  numbers)) {
+                                    if (goalTest(temp1, numbers)) {
 
                                         System.out.println("Goal");
+
+                                        System.out.println("Depth: " + temp.depth);
+                                        for (int k = 0; k < temp.how.size(); k++) {
+
+                                            System.out.println(temp.how.get(k));
+                                        }
+                                        System.out.println("exploredcopy: " + exploredCopy.size());
+//                                System.out.println("frontiercopy: " + frontierCopy.size());
+                                        int x = exploredCopy.size() + frontierCopy.size();
+                                        System.out.println("produced nodes:" + x);
                                         temp1.printSpace();
                                         return true;
                                     } else {
 
-                                        System.out.println("removing");
-                                        explored.get(explored.size()-1).printSpace();
                                         explored.remove(explored.size() - 1);
                                     }
 
@@ -400,28 +394,23 @@ public class q2 {
                         } else {
 
 
-
                             states temp1 = explored.get(explored.size() - 1);
 
-                            if (goalTest(temp1 ,  numbers)) {
+                            if (goalTest(temp1, numbers)) {
 
                                 System.out.println("Goal");
-                                System.out.println("exploredcopy: "+ exploredCopy.size());
-                                System.out.println("frontiercopy: "+ frontierCopy.size());
-                                System.out.println("produced nodes:" + exploredCopy.size()+frontierCopy.size());
+                                System.out.println("exploredcopy: " + exploredCopy.size());
+//                                System.out.println("frontiercopy: " + frontierCopy.size());
+                                System.out.println("produced nodes:" + exploredCopy.size() + frontierCopy.size());
                                 temp1.printSpace();
                                 return true;
                             } else {
 
-
-                                System.out.println("removing");
-                                explored.get(explored.size()-1).printSpace();
                                 explored.remove(explored.size() - 1);
                             }
 
 
                             stillCutOff = false;
-
 
 
                         }
@@ -433,6 +422,7 @@ public class q2 {
 
                     frontier.remove(0);
                     frontierCopy.remove(toexpand);
+
 
 
                     expanding(toexpand);
@@ -447,11 +437,7 @@ public class q2 {
         }
 
         System.out.println("No GOAL Found :(");
-        System.out.println("exploredcopy: "+ exploredCopy.size());
-        System.out.println("frontiercopy: "+ frontierCopy.size());
 
-//        frontier.clear();
-//        explored.clear();
 
 
 
@@ -468,9 +454,9 @@ public class q2 {
 
         for (int i = 0; i < state.GameSpace.size(); i++) {
 
-            if (state.GameSpace.get(i).size() != 0 && state.GameSpace.get(i).size() != numbers) {
-                return false;
-            }
+//            if (state.GameSpace.get(i).size() != 0 && state.GameSpace.get(i).size() != numbers) {
+//                return false;
+//            }
 
             if (state.GameSpace.get(i).size() != 0) {
 
@@ -553,32 +539,17 @@ public class q2 {
         }
 
 
-
         states initialState = new states();
-        initialState.GameSpace=space;
+        initialState.GameSpace = space;
 
         initialState.initial = true;
         initialState.depth = 0;
         q2 q2 = new q2();
-//        q2.frontier.add(initialState);
-//        System.out.println("DLS 0");
-//        q2.frontier.add(initialState);
-//        q2.DLS(0,numbers ,initialState);
-//        q2.frontier.add(initialState);
-//        System.out.println("DLS 1");
-//        q2.DLS(1,numbers ,initialState);
-//        System.out.println(q2.frontier.size());
-//        q2.frontier.add(initialState);
-//        System.out.println("DLS 2");
-//        q2.frontier.clear();
+
+
         q2.frontier.add(initialState);
 
-        q2.IDS(2,numbers ,initialState);
-
-
-
-
-
+        q2.IDS(5, numbers, initialState);
 
 
     }
