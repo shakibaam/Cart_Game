@@ -91,67 +91,112 @@ class state {
 
         System.out.println("------------");
     }
+//
+//    public int calculateH(int numbers) {
+//
+//        int h = 0;
+//
+//        ArrayList<Integer> nums = new ArrayList();
+//        for (int i = numbers; i >= 1; i--) {
+//            nums.add(i);
+//        }
+//
+//        for (int i = 0; i < GameSpace.size(); i++) {
+//
+//            if (GameSpace.get(i).size() != 0 && GameSpace.get(i).size() != 1 ) {
+//
+//                if (GameSpace.get(i).get(0).number != nums.get(0)) {
+//                    h += GameSpace.get(i).size();
+//                } else {
+//
+//                    char color = GameSpace.get(i).get(0).color;
+//                    int x = 1;
+//                    boolean flag = true;
+//                    while (flag) {
+//
+//                        if (GameSpace.get(i).get(x).color == color) {
+//                            if (GameSpace.get(i).get(x).number == nums.get(x)) {
+//                                x++;
+//                                if (x == GameSpace.get(i).size()) {
+//                                    flag = false;
+//                                }
+//
+//
+//                            } else {
+//                                h += (GameSpace.get(i).size() - x);
+//                                flag = false;
+//                            }
+//                        } else {
+//                            h += (GameSpace.get(i).size() - x);
+//                            flag = false;
+//                        }
+//
+//                    }
+//
+//                }
+//            }
+//        }
+//
+//
+//        return h;
+//
+//
+//    }
 
-    public int calculateH(int numbers){
-
+    public int H(int numbers){
         int h=0;
+        boolean flag=true;
 
-        ArrayList<Integer>  nums=new ArrayList();
-        for (int i = numbers; i >=1 ; i--) {
-            nums.add(i);
-        }
+        for (int i = 0; i < GameSpace.size(); i++) {
 
-        for (int i = 0; i <GameSpace.size() ; i++) {
+            if (GameSpace.get(i).size() != 0 && GameSpace.get(i).size() != 1 ) {
 
-            if (GameSpace.get(i).size()!=0) {
+                int temp=1;
+                while (flag){
+//                    System.out.println(GameSpace.get(i).size());
 
-                if (GameSpace.get(i).get(0).number != nums.get(0)) {
-                    h += GameSpace.get(i).size();
-                } else {
-
-                    char color = GameSpace.get(i).get(0).color;
-                    int x = 1;
-                    boolean flag = true;
-                    while (flag) {
-
-                        if (GameSpace.get(i).get(x).color == color) {
-                            if (GameSpace.get(i).get(x).number == nums.get(x)) {
-                                x++;
-                                if (x == GameSpace.get(i).size()) {
-                                    flag = false;
-                                }
+                    if (GameSpace.get(i).get(temp).color!= GameSpace.get(i).get(temp-1).color){
 
 
-                            } else {
-                                h += (GameSpace.get(i).size() - x);
-                                flag = false;
-                            }
-                        } else {
-                            h += (GameSpace.get(i).size() - x);
-                            flag = false;
-                        }
+                        h+=(GameSpace.get(i).size()-temp);
+                       flag=false;
+
 
                     }
 
+
+                    if (GameSpace.get(i).get(temp).number> GameSpace.get(i).get(temp-1).number){
+//                        System.out.println(GameSpace.get(i).get(temp).number+"  "+ GameSpace.get(i).get(temp-1).number);
+                        h+=(GameSpace.get(i).size()-(temp-1));
+                        flag=false;
+
+
+                    }
+                    temp++;
+                    if (temp==GameSpace.get(i).size()){
+                        flag=false;
+                    }
+
+
+
                 }
             }
+            flag=true;
+
         }
+        System.out.println(h);
+        return h;
 
-
-
-       return h;
-        
-        
-        
     }
 
-    public int calculateF(int numbers){
+    public int calculateF(int numbers) {
 
-        return cost+calculateH(numbers);
+        return cost + H(numbers);
     }
 
 
 }
+
 public class q3 {
 
 
@@ -212,7 +257,7 @@ public class q3 {
 
                             newSate.how = (ArrayList<String>) (state.how).clone();
                             newSate.how.add(newSate.howToGet);
-                            newSate.cost=state.cost+1;
+                            newSate.cost = state.cost + 1;
 
 
                             newSate.parent = state;
@@ -276,7 +321,7 @@ public class q3 {
                         newSate.parent = state;
                         newSate.how = (ArrayList<String>) (state.how).clone();
                         newSate.how.add(how);
-                        newSate.cost=state.cost+1;
+                        newSate.cost = state.cost + 1;
                         newSate.printSpace();
 
                         if (!redundant(newSate)) {
@@ -333,26 +378,24 @@ public class q3 {
 
     }
 
-    public void AStar(state state , int numbers){
+    public void AStar(state state, int numbers) {
 
-        boolean goal=false;
+        boolean goal = false;
         while (!goal) {
 
-         state toExpand=findMinF(frontier ,numbers);
-
-
+            state toExpand = findMinF(frontier, numbers);
 
 
             frontier.remove(toExpand);
 
 
-             explored.add(toExpand);
+            explored.add(toExpand);
 
             System.out.println("Going to Expand: ");
             toExpand.printSpace();
 
 
-          boolean  temp = expanding(toExpand, numbers);
+            boolean temp = expanding(toExpand, numbers);
 
             if (temp == true) {
 
@@ -367,13 +410,15 @@ public class q3 {
 
     }
 
-    public state findMinF(ArrayList<state> frontier , int numbers){
+    public state findMinF(ArrayList<state> frontier, int numbers) {
 
-        state temp=frontier.get(0);
-        for (int i = 1; i <frontier.size() ; i++) {
+        state temp = frontier.get(0);
+        System.out.println(frontier.get(0).calculateF(numbers));
+        for (int i = 1; i < frontier.size(); i++) {
+            System.out.println(frontier.get(i).calculateF(numbers));
 
-            if (frontier.get(i).calculateF(numbers)<=temp.calculateF(numbers)){
-                temp=frontier.get(i);
+            if (frontier.get(i).calculateF(numbers) <= temp.calculateF(numbers)) {
+                temp = frontier.get(i);
             }
         }
 
@@ -515,11 +560,11 @@ public class q3 {
 
         initialState.initial = true;
         initialState.depth = 0;
-        initialState.cost=0;
+        initialState.cost = 0;
         q3 q3 = new q3();
         q3.frontier.add(initialState);
-        q3.AStar(initialState,numbers);
-
+//        q3.AStar(initialState, numbers);
+        initialState.H(numbers);
     }
 
 
