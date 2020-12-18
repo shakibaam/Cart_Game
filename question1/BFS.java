@@ -147,8 +147,8 @@ public class BFS {
 
 
                             String how = card1.number + "" + card1.color + " from " + i + " to " + j;
-                            System.out.println("new state reach by: " + how);
-                            System.out.println("---------");
+//                            System.out.println("new state reach by: " + how);
+//                            System.out.println("---------");
                             newSate.howToGet = how;
                             newSate.depth = state.depth + 1;
 
@@ -157,7 +157,7 @@ public class BFS {
 
 
                             newSate.parent = state;
-                            newSate.printSpace();
+//                            newSate.printSpace();
 
                             if (!redundant(newSate)) {
 
@@ -165,7 +165,7 @@ public class BFS {
                                 newNodes.add(newSate);
                             } else {
 
-                                System.out.println("Sorry this node is available");
+//                                System.out.println("Sorry this node is available");
                             }
 
 //                            newSate.printSpace();
@@ -189,7 +189,7 @@ public class BFS {
 
                                 return true;
                             } else {
-                                System.out.println("Not Goal Yet :(");
+//                                System.out.println("Not Goal Yet :(");
                             }
 
 
@@ -210,14 +210,14 @@ public class BFS {
 
 
                         String how = card1.number + "" + card1.color + " from " + i + " to " + j;
-                        System.out.println("new state reach by: " + how);
-                        System.out.println("---------");
+//                        System.out.println("new state reach by: " + how);
+//                        System.out.println("---------");
                         newSate.howToGet = how;
                         newSate.depth = state.depth + 1;
                         newSate.parent = state;
                         newSate.how = (ArrayList<String>) (state.how).clone();
                         newSate.how.add(how);
-                        newSate.printSpace();
+//                        newSate.printSpace();
 
                         if (!redundant(newSate)) {
 
@@ -225,7 +225,7 @@ public class BFS {
                             newNodes.add(newSate);
                         } else {
 
-                            System.out.println("Sorry this node is available");
+//                            System.out.println("Sorry this node is available");
                         }
 
 //                        newSate.printSpace();
@@ -248,7 +248,7 @@ public class BFS {
 
                             return true;
                         } else {
-                            System.out.println("Not Goal Yet :(");
+//                            System.out.println("Not Goal Yet :(");
                         }
 
 
@@ -263,8 +263,8 @@ public class BFS {
 
         }
 
-        System.out.println("Expanding this node finish...");
-        System.out.println("******");
+//        System.out.println("Expanding this node finish...");
+//        System.out.println("******");
 
 
         state.expand = true;
@@ -325,8 +325,8 @@ public class BFS {
 
             explored.add(toExpand);
 
-            System.out.println("Going to Expand: ");
-            toExpand.printSpace();
+//            System.out.println("Going to Expand: ");
+//            toExpand.printSpace();
 
 
             temp = expanding(toExpand, numbers);
@@ -337,7 +337,7 @@ public class BFS {
                 System.out.println("algorithm finish...");
             }
 
-            System.out.println("Frontier: " + frontier.size());
+
 
 
         }
