@@ -92,11 +92,62 @@ class state {
         System.out.println("------------");
     }
 
-    public int calculateH(){return 0;}
+    public int calculateH(int numbers){
 
-    public int calculateF(){
+        int h=0;
 
-        return cost+calculateH();
+        ArrayList<Integer>  nums=new ArrayList();
+        for (int i = numbers; i >=1 ; i--) {
+            nums.add(i);
+        }
+
+        for (int i = 0; i <GameSpace.size() ; i++) {
+
+            if (GameSpace.get(i).size()!=0) {
+
+                if (GameSpace.get(i).get(0).number != nums.get(0)) {
+                    h += GameSpace.get(i).size();
+                } else {
+
+                    char color = GameSpace.get(i).get(0).color;
+                    int x = 1;
+                    boolean flag = true;
+                    while (flag) {
+
+                        if (GameSpace.get(i).get(x).color == color) {
+                            if (GameSpace.get(i).get(x).number == nums.get(x)) {
+                                x++;
+                                if (x == GameSpace.get(i).size()) {
+                                    flag = false;
+                                }
+
+
+                            } else {
+                                h += (GameSpace.get(i).size() - x);
+                                flag = false;
+                            }
+                        } else {
+                            h += (GameSpace.get(i).size() - x);
+                            flag = false;
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+
+
+       return h;
+        
+        
+        
+    }
+
+    public int calculateF(int numbers){
+
+        return cost+calculateH(numbers);
     }
 
 
@@ -161,6 +212,7 @@ public class q3 {
 
                             newSate.how = (ArrayList<String>) (state.how).clone();
                             newSate.how.add(newSate.howToGet);
+                            newSate.cost=state.cost+1;
 
 
                             newSate.parent = state;
@@ -224,6 +276,7 @@ public class q3 {
                         newSate.parent = state;
                         newSate.how = (ArrayList<String>) (state.how).clone();
                         newSate.how.add(how);
+                        newSate.cost=state.cost+1;
                         newSate.printSpace();
 
                         if (!redundant(newSate)) {
@@ -285,7 +338,7 @@ public class q3 {
         boolean goal=false;
         while (!goal) {
 
-         state toExpand=findMinF(frontier);
+         state toExpand=findMinF(frontier ,numbers);
 
 
 
@@ -314,12 +367,12 @@ public class q3 {
 
     }
 
-    public state findMinF(ArrayList<state> frontier){
+    public state findMinF(ArrayList<state> frontier , int numbers){
 
         state temp=frontier.get(0);
         for (int i = 1; i <frontier.size() ; i++) {
 
-            if (frontier.get(i).calculateF()<=temp.calculateF()){
+            if (frontier.get(i).calculateF(numbers)<=temp.calculateF(numbers)){
                 temp=frontier.get(i);
             }
         }
@@ -462,8 +515,11 @@ public class q3 {
 
         initialState.initial = true;
         initialState.depth = 0;
+        initialState.cost=0;
         q3 q3 = new q3();
         q3.frontier.add(initialState);
+        q3.AStar(initialState,numbers);
+
     }
 
 
