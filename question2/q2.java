@@ -3,6 +3,7 @@ package question2;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Scanner;
 
 
@@ -325,15 +326,27 @@ public class q2 {
 
                 if (frontier.isEmpty()) {
 
+                    Iterator iterator=explored.iterator();
 
-                    for (int i = 0; i < explored.size(); i++) {
-                        if (goalTest(explored.get(i) , numbers)) {
+                    while (iterator.hasNext()){
+
+                        if (goalTest((states) iterator.next(), numbers)) {
                             return true;
                         } else {
 
-                            explored.remove(i);
+                            iterator.remove();
                         }
                     }
+//
+//
+//                    for (int i = 0; i < explored.size(); i++) {
+//                        if (goalTest(explored.get(i) , numbers)) {
+//                            return true;
+//                        } else {
+//
+//                            explored.remove(i);
+//                        }
+//                    }
                     superFlag = false;
 
                     System.out.println("No GOAL Found :(");
@@ -376,7 +389,8 @@ public class q2 {
                             } else {
 
 
-
+                                System.out.println("removing");
+                                frontier.get(0).printSpace();
                                 frontier.remove(0);
                                 if (frontier.size() == 0) {
 
@@ -414,6 +428,8 @@ public class q2 {
                             } else {
 
 
+                                System.out.println("removing");
+                                explored.get(explored.size()-1).printSpace();
                                 explored.remove(explored.size() - 1);
                             }
 
@@ -427,6 +443,7 @@ public class q2 {
 
 
                 } else {
+
 
                     frontier.remove(0);
 
@@ -559,7 +576,7 @@ public class q2 {
 //        System.out.println("DLS 2");
 //        q2.frontier.clear();
         q2.frontier.add(initialState);
-//        q2.DLS(2,numbers , initialState);
+
         q2.IDS(2,numbers ,initialState);
 
 
