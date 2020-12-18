@@ -91,57 +91,7 @@ class state {
 
         System.out.println("------------");
     }
-//
-//    public int calculateH(int numbers) {
-//
-//        int h = 0;
-//
-//        ArrayList<Integer> nums = new ArrayList();
-//        for (int i = numbers; i >= 1; i--) {
-//            nums.add(i);
-//        }
-//
-//        for (int i = 0; i < GameSpace.size(); i++) {
-//
-//            if (GameSpace.get(i).size() != 0 && GameSpace.get(i).size() != 1 ) {
-//
-//                if (GameSpace.get(i).get(0).number != nums.get(0)) {
-//                    h += GameSpace.get(i).size();
-//                } else {
-//
-//                    char color = GameSpace.get(i).get(0).color;
-//                    int x = 1;
-//                    boolean flag = true;
-//                    while (flag) {
-//
-//                        if (GameSpace.get(i).get(x).color == color) {
-//                            if (GameSpace.get(i).get(x).number == nums.get(x)) {
-//                                x++;
-//                                if (x == GameSpace.get(i).size()) {
-//                                    flag = false;
-//                                }
-//
-//
-//                            } else {
-//                                h += (GameSpace.get(i).size() - x);
-//                                flag = false;
-//                            }
-//                        } else {
-//                            h += (GameSpace.get(i).size() - x);
-//                            flag = false;
-//                        }
-//
-//                    }
-//
-//                }
-//            }
-//        }
-//
-//
-//        return h;
-//
-//
-//    }
+
 
     public int H(int numbers){
         int h=0;
@@ -184,7 +134,7 @@ class state {
             flag=true;
 
         }
-        System.out.println(h);
+
         return h;
 
     }
@@ -250,8 +200,8 @@ public class q3 {
 
 
                             String how = card1.number + "" + card1.color + " from " + i + " to " + j;
-                            System.out.println("new state reach by: " + how);
-                            System.out.println("---------");
+//                            System.out.println("new state reach by: " + how);
+//                            System.out.println("---------");
                             newSate.howToGet = how;
                             newSate.depth = state.depth + 1;
 
@@ -261,7 +211,7 @@ public class q3 {
 
 
                             newSate.parent = state;
-                            newSate.printSpace();
+//                            newSate.printSpace();
 
                             if (!redundant(newSate)) {
 
@@ -269,7 +219,7 @@ public class q3 {
                                 newNodes.add(newSate);
                             } else {
 
-                                System.out.println("Sorry this node is available");
+//                                System.out.println("Sorry this node is available");
                             }
 
 //                            newSate.printSpace();
@@ -293,7 +243,7 @@ public class q3 {
 
                                 return true;
                             } else {
-                                System.out.println("Not Goal Yet :(");
+//                                System.out.println("Not Goal Yet :(");
                             }
 
 
@@ -314,15 +264,15 @@ public class q3 {
 
 
                         String how = card1.number + "" + card1.color + " from " + i + " to " + j;
-                        System.out.println("new state reach by: " + how);
-                        System.out.println("---------");
+//                        System.out.println("new state reach by: " + how);
+//                        System.out.println("---------");
                         newSate.howToGet = how;
                         newSate.depth = state.depth + 1;
                         newSate.parent = state;
                         newSate.how = (ArrayList<String>) (state.how).clone();
                         newSate.how.add(how);
                         newSate.cost = state.cost + 1;
-                        newSate.printSpace();
+//                        newSate.printSpace();
 
                         if (!redundant(newSate)) {
 
@@ -330,7 +280,7 @@ public class q3 {
                             newNodes.add(newSate);
                         } else {
 
-                            System.out.println("Sorry this node is available");
+//                            System.out.println("Sorry this node is available");
                         }
 
 //                        newSate.printSpace();
@@ -353,7 +303,7 @@ public class q3 {
 
                             return true;
                         } else {
-                            System.out.println("Not Goal Yet :(");
+//                            System.out.println("Not Goal Yet :(");
                         }
 
 
@@ -368,8 +318,8 @@ public class q3 {
 
         }
 
-        System.out.println("Expanding this node finish...");
-        System.out.println("******");
+//        System.out.println("Expanding this node finish...");
+//        System.out.println("******");
 
 
         state.expand = true;
@@ -397,10 +347,10 @@ public class q3 {
 
 
             explored.add(toExpand);
-
-            System.out.println("Going to Expand: ");
-            toExpand.printSpace();
-            System.out.println("H: "+ toExpand.H(numbers));
+//
+//            System.out.println("Going to Expand: ");
+//            toExpand.printSpace();
+//            System.out.println("H: "+ toExpand.H(numbers));
             if (toExpand.H(numbers)==0){
 
 
@@ -430,7 +380,7 @@ public class q3 {
                 System.out.println("algorithm finish...");
             }
 
-            System.out.println("Frontier: " + frontier.size());
+
 
         }
 
