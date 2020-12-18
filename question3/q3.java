@@ -400,6 +400,26 @@ public class q3 {
 
             System.out.println("Going to Expand: ");
             toExpand.printSpace();
+            System.out.println("H: "+ toExpand.H(numbers));
+            if (toExpand.H(numbers)==0){
+
+
+                System.out.println("Goal here!!");
+                toExpand.printSpace();
+                System.out.println("Depth of answer: " + toExpand.depth);
+                System.out.println(toExpand.how.size());
+                for (int k = 0; k < toExpand.how.size(); k++) {
+
+                    System.out.println(toExpand.how.get(k));
+                }
+
+                int produced = frontier.size() + explored.size();
+
+                System.out.println("produced nodes:" + produced);
+                System.out.println("Expanded nodes: " + explored.size());
+                System.out.println("Frontier size : " + frontier.size());
+                return;
+            }
 
 
             boolean temp = expanding(toExpand, numbers);
@@ -422,7 +442,7 @@ public class q3 {
         state temp = frontier.get(0);
 
         for (int i = 1; i < frontier.size(); i++) {
-            System.out.println(frontier.get(i).calculateF(numbers));
+//            System.out.println(frontier.get(i).calculateF(numbers));
 
             if (frontier.get(i).calculateF(numbers) <= temp.calculateF(numbers)) {
                 temp = frontier.get(i);
