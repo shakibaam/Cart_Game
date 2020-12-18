@@ -380,6 +380,13 @@ public class q3 {
 
     public void AStar(state state, int numbers) {
 
+        if (state.H(numbers)==0){
+            System.out.println("Goallll");
+            System.out.println("expanded node: 0");
+            System.out.println("produced node : 1");
+            return;
+        }
+
         boolean goal = false;
         while (!goal) {
 
@@ -413,7 +420,7 @@ public class q3 {
     public state findMinF(ArrayList<state> frontier, int numbers) {
 
         state temp = frontier.get(0);
-        System.out.println(frontier.get(0).calculateF(numbers));
+
         for (int i = 1; i < frontier.size(); i++) {
             System.out.println(frontier.get(i).calculateF(numbers));
 
@@ -563,8 +570,8 @@ public class q3 {
         initialState.cost = 0;
         q3 q3 = new q3();
         q3.frontier.add(initialState);
-//        q3.AStar(initialState, numbers);
-        initialState.H(numbers);
+        q3.AStar(initialState, numbers);
+//        initialState.H(numbers);
     }
 
 
