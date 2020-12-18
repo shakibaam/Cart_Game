@@ -103,6 +103,8 @@ public class q2 {
 
     public ArrayList<states> frontier = new ArrayList<>();
     public ArrayList<states> explored = new ArrayList<>();
+    ArrayList <states> frontierCopy=  new ArrayList();
+    ArrayList<states> exploredCopy=  new ArrayList();
 
     states cloning = new states();
     int counter = 0;
@@ -110,12 +112,13 @@ public class q2 {
 
     public void expanding(states state) {
 
-
+//        System.out.println("^^^"+frontier.size());
         ArrayList tempSpace;
         ArrayList tempSpace1;
 
 
         ArrayList<states> newNodes = new ArrayList();
+
 
 
         for (int i = 0; i < state.GameSpace.size(); i++) {
@@ -168,6 +171,7 @@ public class q2 {
                             System.out.println("counter: " + counter);
 
                             frontier.add(counter, newSate);
+                            frontierCopy.add(newSate);
 
 
                             newNodes.add(newSate);
@@ -203,6 +207,8 @@ public class q2 {
                         newSate.how.add(how);
                         System.out.println("counter: " + counter);
                         frontier.add(counter, newSate);
+                        frontierCopy.add(newSate);
+//                        frontierCopy.addAll(frontier);
 
 
                         newNodes.add(newSate);
@@ -225,46 +231,26 @@ public class q2 {
         System.out.println("Expanding this node finish...");
         System.out.println("******");
 
+
         counter = 0;
         explored.add(state);
+//        exploredCopy.addAll(explored);
+//        frontierCopy.addAll(frontier);
+//        System.out.println("frontier: "+ frontier.size());
+//        System.out.println("frontier: "+ frontierCopy.size());
+//        System.out.println("explored: "+exploredCopy.size());
 
 
         state.expand = true;
 
     }
 
-//    public boolean dfs(int colors, int numbers, states initial) {
-//
-//
-//        frontier.add(initial);
-//        boolean goal = false;
-//
-//
-//        if (frontier.isEmpty()) {
-//
-//            System.out.println("No answer...!");
-//        }
-//
-//        states toExpand = frontier.get(0);
-//        frontier.remove(0);
-//        explored.add(toExpand);
-//        if (goalTest(toExpand)) {
-//
-//            return true;
-//        } else {
-//            expanding(toExpand);
-//            return false;
-//
-//
-//        }
-//
-//
-//    }
 
 
     public void IDS(int limit , int numbers , states initial) {
-        ArrayList frontierCopy= (ArrayList) new ArrayList();
-        ArrayList exploredCopy= (ArrayList) new ArrayList();
+//        ArrayList frontierCopy= (ArrayList) new ArrayList();
+//        ArrayList exploredCopy= (ArrayList) new ArrayList();
+        ArrayList<ArrayList> forOutPut=new ArrayList<>();
 
 
 
@@ -274,19 +260,13 @@ public class q2 {
            while (count<=limit){
                System.out.println("DLS"+" "+count);
                DLS(count,numbers , initial);
-               for (int i = 0; i <frontier.size() ; i++) {
-                   frontierCopy.add(frontier.get(i));
-               }
-
-               for (int i = 0; i <explored.size() ; i++) {
-                   exploredCopy.add(explored.get(i));
-               }
-
 
                frontier.clear();
                explored.clear();
+
                frontier.add(initial);
                count++;
+
 
            }
 
@@ -301,6 +281,8 @@ public class q2 {
 
     public boolean DLS(int limit , int numbers ,states initial) {
 //        frontier.add(initial);
+        int produce=0;
+        int expand=0;
 
 
         boolean goal = false;
@@ -312,12 +294,19 @@ public class q2 {
             if (goalTest(frontier.get(0) ,numbers)) {
 
                 goal = true;
+
                 return true;
             } else {
                 System.out.println("No Goal!!");
+
+
+                frontier.remove(0);
+
                 return false;
 
             }
+
+
         } else {
 
             boolean superFlag = true;
@@ -337,19 +326,12 @@ public class q2 {
                             iterator.remove();
                         }
                     }
-//
-//
-//                    for (int i = 0; i < explored.size(); i++) {
-//                        if (goalTest(explored.get(i) , numbers)) {
-//                            return true;
-//                        } else {
-//
-//                            explored.remove(i);
-//                        }
-//                    }
+
                     superFlag = false;
 
                     System.out.println("No GOAL Found :(");
+                    System.out.println("exploredcopy: "+ exploredCopy.size());
+                    System.out.println("frontiercopy: "+ frontierCopy.size());
                     return false;
 
 
@@ -378,10 +360,11 @@ public class q2 {
 
                                     System.out.println(temp.how.get(k));
                                 }
+                                System.out.println("exploredcopy: "+ exploredCopy.size());
+                                System.out.println("frontiercopy: "+ frontierCopy.size());
+                                int x=exploredCopy.size()+frontierCopy.size();
+                                System.out.println("produced nodes:" +x );
 
-                                System.out.println("produced nodes:" + explored.size()+frontier.size());
-                                System.out.println("Expanded nodes: " + explored.size());
-                                System.out.println("Frontier size : " + frontier.size());
 
 
                                 temp.printSpace();
@@ -423,6 +406,9 @@ public class q2 {
                             if (goalTest(temp1 ,  numbers)) {
 
                                 System.out.println("Goal");
+                                System.out.println("exploredcopy: "+ exploredCopy.size());
+                                System.out.println("frontiercopy: "+ frontierCopy.size());
+                                System.out.println("produced nodes:" + exploredCopy.size()+frontierCopy.size());
                                 temp1.printSpace();
                                 return true;
                             } else {
@@ -446,14 +432,24 @@ public class q2 {
 
 
                     frontier.remove(0);
+                    frontierCopy.remove(toexpand);
+
 
                     expanding(toexpand);
+                    exploredCopy.add(toexpand);
+
+                    frontierCopy.remove(toexpand);
+
+
                 }
 
             }
         }
 
         System.out.println("No GOAL Found :(");
+        System.out.println("exploredcopy: "+ exploredCopy.size());
+        System.out.println("frontiercopy: "+ frontierCopy.size());
+
 //        frontier.clear();
 //        explored.clear();
 
