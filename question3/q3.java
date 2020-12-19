@@ -330,7 +330,9 @@ public class q3 {
 
     public void AStar(state state, int numbers) {
 
-        if (state.H(numbers)==0){
+
+        //if initial state is goal no expanding needed
+        if (goalTest(state,numbers)){
             System.out.println("Goallll");
             System.out.println("expanded node: 0");
             System.out.println("produced node : 1");
@@ -349,27 +351,9 @@ public class q3 {
             explored.add(toExpand);
 //
 //            System.out.println("Going to Expand: ");
-//            toExpand.printSpace();
-//            System.out.println("H: "+ toExpand.H(numbers));
-            if (toExpand.H(numbers)==0){
+            toExpand.printSpace();
+            System.out.println("H: "+ toExpand.H(numbers));
 
-
-                System.out.println("Goal here!!");
-                toExpand.printSpace();
-                System.out.println("Depth of answer: " + toExpand.depth);
-                System.out.println(toExpand.how.size());
-                for (int k = 0; k < toExpand.how.size(); k++) {
-
-                    System.out.println(toExpand.how.get(k));
-                }
-
-                int produced = frontier.size() + explored.size();
-
-                System.out.println("produced nodes:" + produced);
-                System.out.println("Expanded nodes: " + explored.size());
-                System.out.println("Frontier size : " + frontier.size());
-                return;
-            }
 
 
             boolean temp = expanding(toExpand, numbers);
@@ -448,9 +432,9 @@ public class q3 {
 
         for (int i = 0; i < state.GameSpace.size(); i++) {
 
-            if (state.GameSpace.get(i).size() != 0 && state.GameSpace.get(i).size() != numbers) {
-                return false;
-            }
+//            if (state.GameSpace.get(i).size() != 0 && state.GameSpace.get(i).size() != numbers) {
+//                return false;
+//            }
 
             if (state.GameSpace.get(i).size() != 0) {
 
