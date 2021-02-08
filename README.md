@@ -1,2 +1,2 @@
-artificial intelligence project 1,
+# artificial intelligence project 1,
 BFS ,IDS ,Astar
